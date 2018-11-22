@@ -22,4 +22,8 @@ public class DefaultMovieService implements MovieService {
     public void setUserDao(MovieDao movieDao) {
         this.movieDao = movieDao;
     }
+
+    public void setMovieDao(MovieDao movieDao) {
+        this.movieDao = movieDao;
+    }
 }

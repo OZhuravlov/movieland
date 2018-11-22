@@ -8,7 +8,7 @@ public class Movie {
     int id;
     private String nameNative;
     private String nameRussian;
-    private String yearOfRelease;
+    private int yearOfRelease;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Country> countryList;
@@ -23,6 +23,19 @@ public class Movie {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String picturePath;
+
+    public Movie() {
+    }
+
+    public Movie(int id, String nameNative, String nameRussian, int yearOfRelease, Double rating, Double price, String picturePath) {
+        this.id = id;
+        this.nameNative = nameNative;
+        this.nameRussian = nameRussian;
+        this.yearOfRelease = yearOfRelease;
+        this.rating = rating;
+        this.price = price;
+        this.picturePath = picturePath;
+    }
 
     public int getId() {
         return id;
@@ -48,11 +61,11 @@ public class Movie {
         this.nameRussian = nameRussian;
     }
 
-    public String getYearOfRelease() {
+    public int getYearOfRelease() {
         return yearOfRelease;
     }
 
-    public void setYearOfRelease(String yearOfRelease) {
+    public void setYearOfRelease(int yearOfRelease) {
         this.yearOfRelease = yearOfRelease;
     }
 

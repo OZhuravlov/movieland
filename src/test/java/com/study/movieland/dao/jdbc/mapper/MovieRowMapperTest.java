@@ -20,7 +20,7 @@ public class MovieRowMapperTest {
         when(resultSet.getInt("year_of_release")).thenReturn(2000);
         when(resultSet.getDouble("rating")).thenReturn(4.56);
         when(resultSet.getDouble("price")).thenReturn(24.50);
-        when(resultSet.getString("")).thenReturn("http://path/to/picture");
+        when(resultSet.getString("picture_path")).thenReturn("http://path/to/picture");
 
         // when
         Movie actualMovie = movieRowMapper.mapRow(resultSet, 1);
