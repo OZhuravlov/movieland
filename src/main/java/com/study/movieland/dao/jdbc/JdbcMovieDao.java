@@ -14,12 +14,12 @@ import java.util.List;
 public class JdbcMovieDao implements MovieDao {
 
     @Value("${dao.movie.randomCount:3}")
-    private static String randomCount;
+    private int randomCount;
 
     private static final String GET_ALL_SQL =
             "SELECT id, name_native, name_russian, year_of_release, rating, price, picture_path FROM movies";
     private static final String GET_RANDOM_SQL =
-            "SELECT id, name_native, name_russian, year_of_release, rating, price, picture_path FROM movies ORDER BY RANDOM() LIMIT " + randomCount;
+            "SELECT id, name_native, name_russian, year_of_release, rating, price, picture_path FROM movies ORDER BY RANDOM()";
     private static final MovieRowMapper MOVIE_ROW_MAPPER = new MovieRowMapper();
 
     private JdbcTemplate jdbcTemplate;
@@ -31,7 +31,7 @@ public class JdbcMovieDao implements MovieDao {
 
     @Override
     public List<Movie> getRandom() {
-        return jdbcTemplate.query(GET_RANDOM_SQL, MOVIE_ROW_MAPPER);
+        return jdbcTemplate.query(GET_RANDOM_SQL + " LIMIT " + randomCount, MOVIE_ROW_MAPPER);
     }
 
     @Autowired
