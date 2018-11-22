@@ -35,8 +35,7 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Autowired
-    public void setUserDao(MovieDao movieDao) {
+    public void setMovieDao(MovieDao movieDao) {
         this.movieDao = movieDao;
     }
-
 }

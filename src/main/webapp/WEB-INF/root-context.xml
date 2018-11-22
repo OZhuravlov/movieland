@@ -10,8 +10,7 @@
 
     <context:component-scan base-package="com.study.movieland">
         <context:exclude-filter
-                type="annotation"
-                expression="org.springframework.stereotype.Controller"/>
+                type="regex" expression="com\.study\.movieland\.web\..*" />
     </context:component-scan>
 
     <context:property-placeholder location="classpath:application.properties" />
