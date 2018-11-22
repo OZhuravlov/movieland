@@ -21,6 +21,12 @@ public class MovieController {
         return movieService.getAll();
     }
 
+    @RequestMapping(value = {"/v1/movie/random"}, method = RequestMethod.GET, produces = "application/json")
+    public @ResponseBody
+    List<Movie> getRandomMovies() {
+        return movieService.getRandom();
+    }
+
     @Autowired
     public void setMovieService(MovieService movieService) {
         this.movieService = movieService;
