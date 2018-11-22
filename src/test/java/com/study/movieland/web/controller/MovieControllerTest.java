@@ -43,7 +43,7 @@ public class MovieControllerTest {
     }
 
     @Test
-    public void getMovies() throws Exception {
+    public void getAllMovies() throws Exception {
         List<Movie> movies = Arrays.asList(
                 new Movie(1, "Movie 1", "Фильм 1", 2001, 1.21, 23.41, "path/to/picture/1"),
                 new Movie(2, "Movie 2", "Фильм 2", 2002, 1.22, 23.42, "path/to/picture/2"));
@@ -59,4 +59,23 @@ public class MovieControllerTest {
         verify(movieService, times(1)).getAll();
         verifyNoMoreInteractions(movieService);
     }
+
+    @Test
+    public void getRandomMovies() throws Exception {
+        List<Movie> movies = Arrays.asList(
+                new Movie(1, "Random Movie 1", "Случайный Фильм 1", 2001, 1.21, 23.41, "path/to/picture/1"),
+                new Movie(2, "Random Movie 2", "Случайный Фильм 2", 2002, 1.22, 23.42, "path/to/picture/2"));
+        when(movieService.getRandom()).thenReturn(movies);
+        mockMvc.perform(get("/movie/random"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].nameNative", is("Random Movie 1")))
+                .andExpect(jsonPath("$[1].id", is(2)))
+                .andExpect(jsonPath("$[1].nameRussian", is("Случайный Фильм 2")));
+        verify(movieService, times(1)).getRandom();
+        verifyNoMoreInteractions(movieService);
+    }
+
 }
