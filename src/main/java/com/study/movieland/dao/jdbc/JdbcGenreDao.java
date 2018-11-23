@@ -15,10 +15,11 @@ import java.util.List;
 @Repository
 public class JdbcGenreDao implements GenreDao {
 
+    private static final Logger logger = LoggerFactory.getLogger(JdbcGenreDao.class);
+
     private static final String GET_ALL_SQL = "SELECT id, name FROM genres";
     private static final GenreRowMapper GENRE_ROW_MAPPER = new GenreRowMapper();
     private JdbcTemplate jdbcTemplate;
-    private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
 
     @Override
     public List<Genre> getAll() {

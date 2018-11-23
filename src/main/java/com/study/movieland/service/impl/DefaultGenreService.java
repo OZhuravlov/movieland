@@ -13,8 +13,9 @@ import java.util.List;
 @Service
 public class DefaultGenreService implements GenreService {
 
-    private GenreDao genreDao;
     private static final Logger logger = LoggerFactory.getLogger(DefaultGenreService.class);
+
+    private GenreDao genreDao;
 
     @Override
     public List<Genre> getAll() {
