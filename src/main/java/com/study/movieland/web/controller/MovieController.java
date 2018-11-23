@@ -3,27 +3,26 @@ package com.study.movieland.web.controller;
 import com.study.movieland.entity.Movie;
 import com.study.movieland.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping(value = "/movie")
 public class MovieController {
 
     private MovieService movieService;
 
-    @RequestMapping(value = {"/v1/movie"}, method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody
-    List<Movie> getAllMovies() {
+    @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public List<Movie> getAllMovies() {
         return movieService.getAll();
     }
 
-    @RequestMapping(value = {"/v1/movie/random"}, method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody
-    List<Movie> getRandomMovies() {
+    @RequestMapping(value = "/random", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public List<Movie> getRandomMovies() {
         return movieService.getRandom();
     }
 
