@@ -16,8 +16,9 @@ import java.util.List;
 @RequestMapping(value = "/genre")
 public class GenreController {
 
-    private GenreService genreService;
     private static final Logger logger = LoggerFactory.getLogger(GenreController.class);
+
+    private GenreService genreService;
 
     @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public List<Genre> getAllGenres() {

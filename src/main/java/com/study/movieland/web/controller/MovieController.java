@@ -16,8 +16,9 @@ import java.util.List;
 @RequestMapping(value = "/movie")
 public class MovieController {
 
-    private MovieService movieService;
     private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
+
+    private MovieService movieService;
 
     @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public List<Movie> getAllMovies() {
