@@ -23,6 +23,12 @@ public class DefaultGenreService implements GenreService {
         return genreDao.getAll();
     }
 
+    @Override
+    public Genre getById(int id) {
+        logger.debug("Service: Get Genre by Id");
+        return genreDao.getById(id);
+    }
+
     @Autowired
     public void setGenreDao(GenreDao genreDao) {
         this.genreDao = genreDao;

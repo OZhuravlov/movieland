@@ -23,7 +23,9 @@ public class GenreController {
     @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public List<Genre> getAllGenres() {
         logger.info("Get all genres GET request");
-        return genreService.getAll();
+        List<Genre> genres = genreService.getAll();
+        logger.debug("Returning {} genres", genres.size());
+        return genres;
     }
 
     @Autowired
