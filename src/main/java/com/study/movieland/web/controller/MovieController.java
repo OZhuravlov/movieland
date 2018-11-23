@@ -39,15 +39,16 @@ public class MovieController {
     }
 
     @RequestMapping(value = "/genre/{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public ResponseEntity<List<Movie>> getMoviesByGenre(@PathVariable int id, HttpServletResponse response) {
+    public List<Movie> getMoviesByGenre(@PathVariable int id, HttpServletResponse response) {
         try {
             logger.debug("Try to get movies by genreId {} GET request", id);
             List<Movie> movies = movieService.getByGenre(id);
             logger.debug("Returning {} movie(s) for genreId {}", movies.size(), id);
-            return ResponseEntity.status(HttpStatus.OK).body(movies);
+            return movies;
         } catch (InvalidParameterException e) {
             logger.error("Invalid Path Variable value {}. No such genre", id);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return null;
         }
     }
 
