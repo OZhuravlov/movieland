@@ -15,7 +15,7 @@ import java.util.List;
 public class DefaultMovieService implements MovieService {
 
     private MovieDao movieDao;
-    private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
+    private static final Logger logger = LoggerFactory.getLogger(DefaultMovieService.class);
 
     @Override
     public List<Movie> getAll() {
