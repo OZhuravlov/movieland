@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping(value = "/genre")
 public class GenreController {
 
-    private static final Logger logger = LoggerFactory.getLogger(GenreController.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private GenreService genreService;
 

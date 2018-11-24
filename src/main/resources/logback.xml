@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <property name="LOG_PATH" value="c:/temp/logs" />
-    <property name="MAX_SIZE" value="5MB" />
+    <property resource="application.properties" />
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -15,9 +14,9 @@
         </layout>
     </appender>
 
-    <appender name="FILE-DEBUG"
+    <appender name="FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_PATH}/movieland.log</file>
+        <file>${logging.logFilePath}/movieland.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>
                 %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
@@ -26,18 +25,18 @@
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>${LOG_PATH}/movieland.%d{yyyy-MM-dd}.log.%i
+            <fileNamePattern>${logging.logFilePath}/movieland.%d{yyyy-MM-dd}.log.%i
             </fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>${MAX_SIZE}</maxFileSize>
+                <maxFileSize>${logging.logFileMaxSize}</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
     </appender>
 
     <logger name="com.study.movieland" level="debug"
             additivity="false">
-        <appender-ref ref="FILE-DEBUG" />
+        <appender-ref ref="FILE" />
         <appender-ref ref="STDOUT" />
     </logger>
 

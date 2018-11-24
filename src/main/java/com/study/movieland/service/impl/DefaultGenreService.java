@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class DefaultGenreService implements GenreService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultGenreService.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private GenreDao genreDao;
 

@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping(value = "/movie")
 public class MovieController {
 
-    private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private MovieService movieService;
 

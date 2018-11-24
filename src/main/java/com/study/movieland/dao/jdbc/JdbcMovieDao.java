@@ -2,6 +2,7 @@ package com.study.movieland.dao.jdbc;
 
 import com.study.movieland.dao.MovieDao;
 import com.study.movieland.dao.jdbc.mapper.MovieRowMapper;
+import com.study.movieland.entity.Genre;
 import com.study.movieland.entity.Movie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,7 @@ import java.util.List;
 @Repository
 public class JdbcMovieDao implements MovieDao {
 
-    private static final Logger logger = LoggerFactory.getLogger(JdbcMovieDao.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final String GET_ALL_SQL =
             "SELECT id, name_native, name_russian, year_of_release, rating, price, picture_path FROM movies";
@@ -30,8 +31,10 @@ public class JdbcMovieDao implements MovieDao {
 
     @Override
     public List<Movie> getAll() {
-        logger.debug("Dao Get All Movies");
-        return jdbcTemplate.query(GET_ALL_SQL, MOVIE_ROW_MAPPER);
+        logger.debug("get All Movies");
+        List<Movie> movies = jdbcTemplate.query(GET_ALL_SQL, MOVIE_ROW_MAPPER);
+        logger.debug("getAll: return List of {} Movie", movies);
+        return movies;
     }
 
     @Override
