@@ -1,6 +1,7 @@
 package com.study.movieland.dao.jdbc;
 
 import com.study.movieland.dao.jdbc.mapper.MovieRowMapper;
+import com.study.movieland.exception.NoDataFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -9,8 +10,6 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-
-import java.security.InvalidParameterException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class JdbcGenreDaoTest {
@@ -21,8 +20,8 @@ public class JdbcGenreDaoTest {
     @InjectMocks
     private JdbcGenreDao jdbcGenreDao = new JdbcGenreDao();
 
-    @Test(expected = InvalidParameterException.class)
-    public void testGetByIdInvalidParameterException() {
+    @Test(expected = NoDataFoundException.class)
+    public void testGetByIdNoDataFoundException() {
         Mockito.when(
                 jdbcTemplate.queryForObject(
                         Mockito.anyString(),

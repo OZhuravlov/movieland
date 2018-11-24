@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Repository
@@ -39,7 +40,7 @@ public class JdbcMovieDao implements MovieDao {
 
     @Override
     public List<Movie> getAll() {
-        logger.debug("get All Movies");
+        logger.info("get All Movies");
         List<Movie> movies = jdbcTemplate.query(GET_ALL_SQL, MOVIE_ROW_MAPPER);
         logger.debug("getAll: return List of {} Movie", movies);
         return movies;
@@ -47,13 +48,23 @@ public class JdbcMovieDao implements MovieDao {
 
     @Override
     public List<Movie> getRandom() {
-        logger.debug("Dao Get Random Movies");
-        return jdbcTemplate.query(GET_RANDOM_SQL, MOVIE_ROW_MAPPER, randomCount);
+        logger.info("get Random Movies");
+        List<Movie> movies = jdbcTemplate.query(GET_RANDOM_SQL, MOVIE_ROW_MAPPER, randomCount);
+        logger.debug("getRandom: return List of {} Movie", movies);
+        if(logger.isTraceEnabled()) {
+            logger.trace(Arrays.toString(movies.toArray()));
+        }
+        return movies;
     }
 
     @Override
     public List<Movie> getByGenreId(int genreId) {
-        logger.debug("Dao Get Movies by Genre");
-        return jdbcTemplate.query(GET_BY_GENRE_SQL, MOVIE_ROW_MAPPER, genreId);
+        logger.info("get Movies by Genre");
+        List<Movie> movies = jdbcTemplate.query(GET_BY_GENRE_SQL, MOVIE_ROW_MAPPER, genreId);
+        logger.debug("getRandom: return List of {} Movie", movies);
+        if(logger.isTraceEnabled()) {
+            logger.trace(Arrays.toString(movies.toArray()));
+        }
+        return movies;
     }
 }
