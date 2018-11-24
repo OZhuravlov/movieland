@@ -22,7 +22,7 @@ public class GenreController {
 
     @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public List<Genre> getAllGenres() {
-        logger.info("Get all genres GET request");
+        logger.info("Get all genres");
         return genreService.getAll();
     }
 

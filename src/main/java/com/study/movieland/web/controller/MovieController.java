@@ -22,13 +22,13 @@ public class MovieController {
 
     @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public List<Movie> getAllMovies() {
-        logger.info("Get all movies GET request");
+        logger.info("Get all movies");
         return movieService.getAll();
     }
 
     @RequestMapping(value = "/random", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public List<Movie> getRandomMovies() {
-        logger.debug("Get random movies GET request");
+        logger.info("Get random movies");
         return movieService.getRandom();
     }
 

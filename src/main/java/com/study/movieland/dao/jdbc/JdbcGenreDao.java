@@ -3,7 +3,6 @@ package com.study.movieland.dao.jdbc;
 import com.study.movieland.dao.GenreDao;
 import com.study.movieland.dao.jdbc.mapper.GenreRowMapper;
 import com.study.movieland.entity.Genre;
-import com.study.movieland.web.controller.MovieController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

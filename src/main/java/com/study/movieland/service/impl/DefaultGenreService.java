@@ -20,7 +20,10 @@ public class DefaultGenreService implements GenreService {
     @Override
     public List<Genre> getAll() {
         logger.debug("Service: Get All Genres");
-        return genreDao.getAll();
+        long startTime = System.currentTimeMillis();
+        List<Genre> genres = genreDao.getAll();
+        logger.debug("Query took:{}", System.currentTimeMillis() - startTime);
+        return genres;
     }
 
     @Autowired

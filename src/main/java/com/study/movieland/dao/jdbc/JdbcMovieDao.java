@@ -2,7 +2,6 @@ package com.study.movieland.dao.jdbc;
 
 import com.study.movieland.dao.MovieDao;
 import com.study.movieland.dao.jdbc.mapper.MovieRowMapper;
-import com.study.movieland.entity.Genre;
 import com.study.movieland.entity.Movie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
