@@ -38,7 +38,7 @@ public class GenreControllerTest {
     }
 
     @Test
-    public void getAllGenres() throws Exception {
+    public void getAllGenresTest() throws Exception {
         List<Genre> genres = Arrays.asList(
                 new Genre(1, "Genre 1"),
                 new Genre(2, "Genre 2"));
