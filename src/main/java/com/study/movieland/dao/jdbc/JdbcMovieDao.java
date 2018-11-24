@@ -3,6 +3,8 @@ package com.study.movieland.dao.jdbc;
 import com.study.movieland.dao.MovieDao;
 import com.study.movieland.dao.jdbc.mapper.MovieRowMapper;
 import com.study.movieland.entity.Movie;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,25 +15,29 @@ import java.util.List;
 @Repository
 public class JdbcMovieDao implements MovieDao {
 
-    @Value("${dao.movie.randomCount:3}")
-    private int randomCount;
+    private static final Logger logger = LoggerFactory.getLogger(JdbcMovieDao.class);
 
     private static final String GET_ALL_SQL =
             "SELECT id, name_native, name_russian, year_of_release, rating, price, picture_path FROM movies";
     private static final String GET_RANDOM_SQL =
-            "SELECT id, name_native, name_russian, year_of_release, rating, price, picture_path FROM movies ORDER BY RANDOM()";
+            "SELECT id, name_native, name_russian, year_of_release, rating, price, picture_path FROM movies ORDER BY RANDOM() LIMIT ?";
     private static final MovieRowMapper MOVIE_ROW_MAPPER = new MovieRowMapper();
 
     private JdbcTemplate jdbcTemplate;
 
+    @Value("${dao.movie.randomCount:3}")
+    private int randomCount;
+
     @Override
     public List<Movie> getAll() {
+        logger.debug("Dao Get All Movies");
         return jdbcTemplate.query(GET_ALL_SQL, MOVIE_ROW_MAPPER);
     }
 
     @Override
     public List<Movie> getRandom() {
-        return jdbcTemplate.query(GET_RANDOM_SQL + " LIMIT " + randomCount, MOVIE_ROW_MAPPER);
+        logger.debug("Dao Get Random Movies");
+        return jdbcTemplate.query(GET_RANDOM_SQL, MOVIE_ROW_MAPPER, randomCount);
     }
 
     @Autowired
