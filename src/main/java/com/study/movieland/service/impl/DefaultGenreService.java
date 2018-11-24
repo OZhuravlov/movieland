@@ -15,6 +15,7 @@ public class DefaultGenreService implements GenreService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    @Autowired
     private GenreDao genreDao;
 
     @Override

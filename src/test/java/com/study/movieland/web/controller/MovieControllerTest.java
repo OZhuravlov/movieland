@@ -1,6 +1,7 @@
 package com.study.movieland.web.controller;
 
 import com.study.movieland.entity.Movie;
+import com.study.movieland.exception.NoDataFoundException;
 import com.study.movieland.service.impl.DefaultMovieService;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,10 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -52,8 +50,11 @@ public class MovieControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", is(1)))
                 .andExpect(jsonPath("$[0].nameNative", is("Movie 1")))
-                .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].nameRussian", is("Фильм 2")));
+                .andExpect(jsonPath("$[0].nameRussian", is("Фильм 1")))
+                .andExpect(jsonPath("$[0].yearOfRelease", is(2001)))
+                .andExpect(jsonPath("$[0].rating", is(1.21)))
+                .andExpect(jsonPath("$[0].price", is(23.41)))
+                .andExpect(jsonPath("$[0].picturePath", is("path/to/picture/1")));
         verify(movieService, times(1)).getAll();
         verifyNoMoreInteractions(movieService);
     }
@@ -70,8 +71,11 @@ public class MovieControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", is(1)))
                 .andExpect(jsonPath("$[0].nameNative", is("Random Movie 1")))
-                .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].nameRussian", is("Случайный Фильм 2")));
+                .andExpect(jsonPath("$[0].nameRussian", is("Случайный Фильм 1")))
+                .andExpect(jsonPath("$[0].yearOfRelease", is(2001)))
+                .andExpect(jsonPath("$[0].rating", is(1.21)))
+                .andExpect(jsonPath("$[0].price", is(23.41)))
+                .andExpect(jsonPath("$[0].picturePath", is("path/to/picture/1")));
         verify(movieService, times(1)).getRandom();
         verifyNoMoreInteractions(movieService);
     }
@@ -96,9 +100,9 @@ public class MovieControllerTest {
     }
 
     @Test
-    public void getMoviesByGenre_InvalidParameterExceptionTest() throws Exception {
+    public void getMoviesByGenre_NoDataFoundExceptionTest() throws Exception {
         int id = 0;
-        when(movieService.getByGenre(id)).thenThrow(new InvalidParameterException("No such genre"));
+        when(movieService.getByGenre(id)).thenThrow(new NoDataFoundException("No such genre"));
         mockMvc.perform(get("/movie/genre/" + id))
                 .andExpect(status().isNotFound());
         verify(movieService, times(1)).getByGenre(id);

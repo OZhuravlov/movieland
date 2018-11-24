@@ -20,6 +20,7 @@
         <servlet-api-version>3.1.0</servlet-api-version>
         <hamcrest.version>1.3</hamcrest.version>
         <jsonpath.version>2.2.0</jsonpath.version>
+        <lombok.version>1.18.4</lombok.version>
     </properties>
 
     <build>
@@ -95,6 +96,14 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
+        </dependency>
+
+        <!-- Automation -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Test -->

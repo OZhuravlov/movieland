@@ -3,6 +3,7 @@ package com.study.movieland.dao.jdbc;
 import com.study.movieland.dao.MovieDao;
 import com.study.movieland.dao.jdbc.mapper.MovieRowMapper;
 import com.study.movieland.entity.Movie;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class JdbcMovieDao implements MovieDao {
 
     private static final MovieRowMapper MOVIE_ROW_MAPPER = new MovieRowMapper();
 
+    @Autowired
+    @Setter
     private JdbcTemplate jdbcTemplate;
 
     @Value("${dao.movie.randomCount:3}")
@@ -52,10 +55,5 @@ public class JdbcMovieDao implements MovieDao {
     public List<Movie> getByGenreId(int genreId) {
         logger.debug("Dao Get Movies by Genre");
         return jdbcTemplate.query(GET_BY_GENRE_SQL, MOVIE_ROW_MAPPER, genreId);
-    }
-
-    @Autowired
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
     }
 }
