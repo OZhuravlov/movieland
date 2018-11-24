@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public class JdbcGenreDao implements GenreDao {
 
-    private static final Logger logger = LoggerFactory.getLogger(JdbcGenreDao.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final String GET_ALL_SQL = "SELECT id, name FROM genres";
     private static final String GET_BY_ID_SQL = "SELECT id, name FROM genres WHERE id = ?";
@@ -25,8 +25,10 @@ public class JdbcGenreDao implements GenreDao {
 
     @Override
     public List<Genre> getAll() {
-        logger.debug("Dao get All Genres");
-        return jdbcTemplate.query(GET_ALL_SQL, GENRE_ROW_MAPPER);
+        logger.info("get All Genres");
+        List<Genre> genres = jdbcTemplate.query(GET_ALL_SQL, GENRE_ROW_MAPPER);
+        logger.debug("getAll: return List of {} Genre instance", genres);
+        return genres;
     }
 
     @Override

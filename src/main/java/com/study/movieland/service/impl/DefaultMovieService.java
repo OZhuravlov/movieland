@@ -16,21 +16,27 @@ import java.util.List;
 @Service
 public class DefaultMovieService implements MovieService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultMovieService.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private MovieDao movieDao;
     private GenreService genreService;
 
     @Override
     public List<Movie> getAll() {
-        logger.debug("Service: Get All Movies");
-        return movieDao.getAll();
+        logger.info("get All Movies");
+        long startTime = System.currentTimeMillis();
+        List<Movie> movies = movieDao.getAll();
+        logger.debug("Query took:{}", System.currentTimeMillis() - startTime);
+        return movies;
     }
 
     @Override
     public List<Movie> getRandom() {
-        logger.debug("Service: Get Random Movies");
-        return movieDao.getRandom();
+        logger.info("get Random Movies");
+        long startTime = System.currentTimeMillis();
+        List<Movie> movies = movieDao.getRandom();
+        logger.debug("Query took:{}", System.currentTimeMillis() - startTime);
+        return movies;
     }
 
     @Override

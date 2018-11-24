@@ -18,13 +18,13 @@ import java.util.List;
 @RequestMapping(value = "/movie")
 public class MovieController {
 
-    private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private MovieService movieService;
 
     @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public List<Movie> getAllMovies() {
-        logger.info("Get all movies GET request");
+        logger.info("Get all movies");
         List<Movie> movies = movieService.getAll();
         logger.debug("Returning {} movies", movies.size());
         return movies;
@@ -32,6 +32,7 @@ public class MovieController {
 
     @RequestMapping(value = "/random", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public List<Movie> getRandomMovies() {
+<<<<<<< HEAD
         logger.debug("Get random movies GET request");
         List<Movie> movies = movieService.getRandom();
         logger.debug("Returning {} random movies", movies.size());
@@ -50,6 +51,10 @@ public class MovieController {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
+=======
+        logger.info("Get random movies");
+        return movieService.getRandom();
+>>>>>>> feature/iteration-1/lg-1
     }
 
     @Autowired

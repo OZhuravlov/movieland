@@ -13,14 +13,17 @@ import java.util.List;
 @Service
 public class DefaultGenreService implements GenreService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultGenreService.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private GenreDao genreDao;
 
     @Override
     public List<Genre> getAll() {
         logger.debug("Service: Get All Genres");
-        return genreDao.getAll();
+        long startTime = System.currentTimeMillis();
+        List<Genre> genres = genreDao.getAll();
+        logger.debug("Query took:{}", System.currentTimeMillis() - startTime);
+        return genres;
     }
 
     @Override

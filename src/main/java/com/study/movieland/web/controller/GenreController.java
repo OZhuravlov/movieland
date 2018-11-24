@@ -16,13 +16,13 @@ import java.util.List;
 @RequestMapping(value = "/genre")
 public class GenreController {
 
-    private static final Logger logger = LoggerFactory.getLogger(GenreController.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private GenreService genreService;
 
     @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public List<Genre> getAllGenres() {
-        logger.info("Get all genres GET request");
+        logger.info("Get all genres");
         List<Genre> genres = genreService.getAll();
         logger.debug("Returning {} genres", genres.size());
         return genres;
