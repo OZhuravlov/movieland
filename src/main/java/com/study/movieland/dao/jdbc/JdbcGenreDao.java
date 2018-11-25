@@ -11,9 +11,10 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Repository
+@Repository("jdbcGenreDao")
 public class JdbcGenreDao implements GenreDao {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -28,7 +29,7 @@ public class JdbcGenreDao implements GenreDao {
         logger.info("get All Genres");
         List<Genre> genres = jdbcTemplate.query(GET_ALL_SQL, GENRE_ROW_MAPPER);
         logger.debug("getAll: return List of {} Genre instance", genres);
-        return genres;
+        return new ArrayList<>(genres);
     }
 
     @Override
