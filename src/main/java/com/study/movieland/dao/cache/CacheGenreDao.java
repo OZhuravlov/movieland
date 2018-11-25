@@ -21,7 +21,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class CacheGenreDao implements GenreDao {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+    private final ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
     private final Lock readLock = readWriteLock.readLock();
     private final Lock writeLock = readWriteLock.writeLock();
 
