@@ -41,7 +41,10 @@ public class CacheGenreDao implements GenreDao {
         genreList.forEach(genre -> genreMap.put(genre.getId(), genre));
 
         readLock.unlock();
-        writeLock.lock();
+        if(!writeLock.tryLock()){
+            logger.warn("Another process locked cache for refreshing. Waiting for lock release");
+            writeLock.lock();
+        }
         try {
             genres = genreMap;
         } finally {
@@ -55,8 +58,12 @@ public class CacheGenreDao implements GenreDao {
         logger.debug("getAll: return List of {} Genre instances from cache", genres);
         readLock.lock();
         try {
-            ArrayList<Genre> genres = new ArrayList<>(this.genres.values());
-            return genres;
+            if (genres == null) {
+                logger.warn("genre cache is empty");
+                return null;
+            }
+            List<Genre> genreList = new ArrayList<>(genres.values());
+            return genreList;
         } finally {
             readLock.unlock();
         }
