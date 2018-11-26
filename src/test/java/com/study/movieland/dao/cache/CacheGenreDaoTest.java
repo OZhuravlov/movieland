@@ -7,10 +7,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class CacheGenreDaoTest {
 
@@ -18,7 +20,7 @@ public class CacheGenreDaoTest {
     StubGenreDao stubGenreDao;
 
     @Before
-    public void init(){
+    public void init() {
         genreDao = new CacheGenreDao();
         stubGenreDao = new StubGenreDao();
         genreDao.setGenreDao(stubGenreDao);
@@ -26,13 +28,17 @@ public class CacheGenreDaoTest {
 
     @Test
     public void initAndGetAllTest() {
-        List<Genre> genres = genreDao.getAll();
-        assertNull(genres);
-
         genreDao.init();
-        genres = genreDao.getAll();
+        Collection<Genre> genres = genreDao.getAll();
         assertEquals(2, genres.size());
         assertThat(genres, is(stubGenreDao.getAll()));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void getAllImmutableTest() {
+        genreDao.init();
+        Collection<Genre> genres = genreDao.getAll();
+        genres.add(new Genre(3, "Genre 3"));
     }
 
     @Test
