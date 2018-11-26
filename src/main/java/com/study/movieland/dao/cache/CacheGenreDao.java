@@ -21,7 +21,7 @@ public class CacheGenreDao implements GenreDao {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private GenreDao genreDao;
-    private Map<Integer, Genre> genres;
+    volatile private Map<Integer, Genre> genres;
 
     @PostConstruct
     @Scheduled(fixedDelayString = "${scheduler.fixedDelayInMilliseconds}",
