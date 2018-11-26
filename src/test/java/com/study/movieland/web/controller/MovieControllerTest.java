@@ -120,15 +120,15 @@ public class MovieControllerTest {
         SortDirection ratingSorting = SortDirection.DESC;
         SortDirection priceSorting = null;
         MovieRequestParam movieRequestParam = movieController.createMovieRequestParam(ratingSorting, priceSorting);
-        assertEquals(SortDirection.DESC, movieRequestParam.getRatingSorting());
-        assertNull(movieRequestParam.getPriceSorting());
+        assertEquals("rating", movieRequestParam.getSortFieldName());
+        assertEquals(SortDirection.DESC, movieRequestParam.getSortDirection());
 
         // Sort by price asc
         SortDirection ratingSorting2 = null;
         SortDirection priceSorting2 = SortDirection.ASC;
         MovieRequestParam movieRequestParam2 = movieController.createMovieRequestParam(ratingSorting2, priceSorting2);
-        assertNull(movieRequestParam2.getRatingSorting());
-        assertEquals(SortDirection.ASC, movieRequestParam2.getPriceSorting());
+        assertEquals("price", movieRequestParam2.getSortFieldName());
+        assertEquals(SortDirection.ASC, movieRequestParam2.getSortDirection());
 
         // no order
         SortDirection ratingSorting3 = null;

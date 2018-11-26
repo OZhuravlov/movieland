@@ -19,6 +19,9 @@ import java.util.List;
 @RequestMapping(value = "/movie")
 public class MovieController {
 
+    private static final String RATING_FIELD_NAME = "rating";
+    private static final String PRICE_FIELD_NAME = "price";
+
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private MovieService movieService;
@@ -62,13 +65,16 @@ public class MovieController {
         MovieRequestParam movieRequestParam = new MovieRequestParam();
         if(ratingSort != null){
             if (SortDirection.DESC.equals(ratingSort)) {
-                movieRequestParam.setRatingSorting(ratingSort);
+                movieRequestParam.setSortFieldName(RATING_FIELD_NAME);
+                movieRequestParam.setSortDirection(ratingSort);
+                return movieRequestParam;
             } else {
                 logger.warn("Eligible sort direction param {} for rating", ratingSort);
                 throw new BadRequestParamException("Invalid sorting directing");
             }
         }
-        movieRequestParam.setPriceSorting(priceSort);
+        movieRequestParam.setSortFieldName(PRICE_FIELD_NAME);
+        movieRequestParam.setSortDirection(priceSort);
         return movieRequestParam;
     }
 

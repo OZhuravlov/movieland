@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class MovieRequestParam {
-    private SortDirection ratingSorting;
-    private SortDirection priceSorting;
+    private String sortFieldName;
+    private SortDirection sortDirection;
 }

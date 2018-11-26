@@ -26,14 +26,16 @@ public class QueryUtilTest {
 
         // rating sorting
         MovieRequestParam params = new MovieRequestParam();
-        params.setRatingSorting(SortDirection.ASC);
+        params.setSortFieldName("rating");
+        params.setSortDirection(SortDirection.ASC);
         expectedSql = "SELECT ORDER BY rating ASC";
         actualSql = QueryUtil.setOrderBy(sql, params);
         assertTrue(expectedSql.equalsIgnoreCase(actualSql));
 
         // price sorting
         MovieRequestParam params2 = new MovieRequestParam();
-        params2.setPriceSorting(SortDirection.DESC);
+        params2.setSortFieldName("price");
+        params2.setSortDirection(SortDirection.DESC);
         expectedSql = "SELECT ORDER BY price DESC";
         actualSql = QueryUtil.setOrderBy(sql, params2);
         assertTrue(expectedSql.equalsIgnoreCase(actualSql));
