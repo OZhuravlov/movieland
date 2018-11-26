@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -21,9 +22,9 @@ public class GenreController {
     private GenreService genreService;
 
     @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public List<Genre> getAllGenres() {
+    public Collection<Genre> getAllGenres() {
         logger.info("Get all genres");
-        List<Genre> genres = genreService.getAll();
+        Collection<Genre> genres = genreService.getAll();
         logger.debug("Returning {} genres", genres.size());
         return genres;
     }

@@ -51,7 +51,7 @@ public class JdbcMovieDao implements MovieDao {
         logger.info("get Random Movies");
         List<Movie> movies = jdbcTemplate.query(GET_RANDOM_SQL, MOVIE_ROW_MAPPER, randomCount);
         logger.debug("getRandom: return List of {} Movie", movies);
-        if(logger.isTraceEnabled()) {
+        if (logger.isTraceEnabled()) {
             logger.trace(Arrays.toString(movies.toArray()));
         }
         return movies;
@@ -62,7 +62,7 @@ public class JdbcMovieDao implements MovieDao {
         logger.info("get Movies by Genre");
         List<Movie> movies = jdbcTemplate.query(GET_BY_GENRE_SQL, MOVIE_ROW_MAPPER, genreId);
         logger.debug("getRandom: return List of {} Movie", movies);
-        if(logger.isTraceEnabled()) {
+        if (logger.isTraceEnabled()) {
             logger.trace(Arrays.toString(movies.toArray()));
         }
         return movies;
