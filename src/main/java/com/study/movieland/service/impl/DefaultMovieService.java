@@ -3,6 +3,7 @@ package com.study.movieland.service.impl;
 import com.study.movieland.dao.MovieDao;
 import com.study.movieland.entity.Genre;
 import com.study.movieland.entity.Movie;
+import com.study.movieland.entity.OrderBy;
 import com.study.movieland.service.GenreService;
 import com.study.movieland.service.MovieService;
 import org.slf4j.Logger;
@@ -21,10 +22,10 @@ public class DefaultMovieService implements MovieService {
     private GenreService genreService;
 
     @Override
-    public List<Movie> getAll() {
+    public List<Movie> getAll(OrderBy orderBy) {
         logger.info("get All Movies");
         long startTime = System.currentTimeMillis();
-        List<Movie> movies = movieDao.getAll();
+        List<Movie> movies = movieDao.getAll(orderBy);
         logger.debug("Query took:{}", System.currentTimeMillis() - startTime);
         return movies;
     }
@@ -39,11 +40,13 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Override
-    public List<Movie> getByGenre(int genreId) {
-        logger.debug("Service: getting Genre for id {}", genreId);
+    public List<Movie> getByGenre(int genreId, OrderBy orderBy) {
+        logger.info("get Movies by Genre", genreId);
+        logger.info("check Genre for id {}", genreId);
         Genre genre = genreService.getById(genreId);
-        logger.debug("Service: getting Movies by Genre");
-        return movieDao.getByGenreId(genre.getId());
+        long startTime = System.currentTimeMillis();
+        logger.debug("Query took:{}", System.currentTimeMillis() - startTime);
+        return movieDao.getByGenreId(genre.getId(), orderBy);
     }
 
     @Autowired
