@@ -13,7 +13,7 @@
                 type="regex" expression="com\.study\.movieland\.web\..*" />
     </context:component-scan>
 
-    <context:property-placeholder location="classpath:application.properties" />
+    <context:property-placeholder location="classpath:application.yaml" />
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource"></property>
