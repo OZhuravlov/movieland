@@ -1,17 +1,16 @@
 package com.study.movieland.service;
 
 import com.study.movieland.entity.Movie;
-import com.study.movieland.entity.OrderBy;
-import com.study.movieland.entity.SortDirection;
+import com.study.movieland.entity.MovieRequestParam;
 
 import java.util.List;
 
 public interface MovieService {
 
-    List<Movie> getAll(OrderBy orderBy);
+    List<Movie> getAll(MovieRequestParam movieRequestParam);
 
     List<Movie> getRandom();
 
-    List<Movie> getByGenre(int genreId, OrderBy orderBy);
+    List<Movie> getByGenre(int genreId, MovieRequestParam movieRequestParam);
 
 }

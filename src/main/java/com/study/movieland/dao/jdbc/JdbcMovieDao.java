@@ -2,8 +2,9 @@ package com.study.movieland.dao.jdbc;
 
 import com.study.movieland.dao.MovieDao;
 import com.study.movieland.dao.jdbc.mapper.MovieRowMapper;
+import com.study.movieland.dao.jdbc.util.QueryUtil;
 import com.study.movieland.entity.Movie;
-import com.study.movieland.entity.OrderBy;
+import com.study.movieland.entity.MovieRequestParam;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Repository
@@ -40,16 +40,13 @@ public class JdbcMovieDao implements MovieDao {
     private int randomCount;
 
     @Override
-    public List<Movie> getAll(OrderBy orderBy) {
+    public List<Movie> getAll(MovieRequestParam movieRequestParam) {
         String sql = GET_ALL_SQL;
-        if (orderBy != null) {
-            sql += " ORDER BY " + orderBy.getFieldName() + " " + orderBy.getSortDirection();
-            logger.info("get All Movies order by {} {}", orderBy.getFieldName(), orderBy.getSortDirection());
-        } else {
-            logger.info("get All Movies");
-        }
+        logger.info("get All Movies");
+        sql = QueryUtil.addOptionalRequestParamsToQuery(sql, movieRequestParam);
+        logger.debug("get All Movies query {}", sql);
         List<Movie> movies = jdbcTemplate.query(sql, MOVIE_ROW_MAPPER);
-        logger.debug("getAll: return List of {} Movie", movies.size());
+        logger.trace("getAll: return List of movies {}", movies);
         return movies;
     }
 
@@ -57,27 +54,18 @@ public class JdbcMovieDao implements MovieDao {
     public List<Movie> getRandom() {
         logger.info("get Random Movies");
         List<Movie> movies = jdbcTemplate.query(GET_RANDOM_SQL, MOVIE_ROW_MAPPER, randomCount);
-        logger.debug("getRandom: return List of {} Movie", movies.size());
-        if (logger.isTraceEnabled()) {
-            logger.trace(Arrays.toString(movies.toArray()));
-        }
+        logger.trace("getRandom: return List of movies {}", movies);
         return movies;
     }
 
     @Override
-    public List<Movie> getByGenreId(int genreId, OrderBy orderBy) {
+    public List<Movie> getByGenreId(int genreId, MovieRequestParam movieRequestParam) {
         String sql = GET_BY_GENRE_SQL;
-        if (orderBy != null) {
-            sql += " ORDER BY " + orderBy.getFieldName() + " " + orderBy.getSortDirection();
-            logger.info("get Movies by Genre order by {} {}", orderBy.getFieldName(), orderBy.getSortDirection());
-        } else {
-            logger.info("get Movies by Genre");
-        }
+        logger.info("get Movies by genreId {}", genreId);
+        sql = QueryUtil.addOptionalRequestParamsToQuery(sql, movieRequestParam);
+        logger.debug("get Movies by Genre query {}", sql);
         List<Movie> movies = jdbcTemplate.query(sql, MOVIE_ROW_MAPPER, genreId);
-        logger.debug("getByGenreId: return List of {} Movie", movies.size());
-        if (logger.isTraceEnabled()) {
-            logger.trace(Arrays.toString(movies.toArray()));
-        }
+        logger.trace("getAll: return List of movies for genreId {}: {}", genreId, movies);
         return movies;
     }
 

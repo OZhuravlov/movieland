@@ -1,14 +1,16 @@
 package com.study.movieland.web.controller;
 
 import com.study.movieland.entity.Movie;
-import com.study.movieland.entity.OrderBy;
+import com.study.movieland.entity.MovieRequestParam;
 import com.study.movieland.entity.SortDirection;
 import com.study.movieland.exception.BadRequestParamException;
 import com.study.movieland.service.MovieService;
+import com.study.movieland.web.converter.SortDirectionConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,18 +19,17 @@ import java.util.List;
 @RequestMapping(value = "/movie")
 public class MovieController {
 
-    private final static String NO_ORDER = "NONE";
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private MovieService movieService;
 
     @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public List<Movie> getAllMovies(@RequestParam(value = "rating", required = false, defaultValue = "NONE") String ratingSorting,
-                                    @RequestParam(value = "price", required = false, defaultValue = "NONE") String priceSorting) {
+    public List<Movie> getAllMovies(@RequestParam(value = "rating", required = false, defaultValue = "NONE") SortDirection ratingSorting,
+                                    @RequestParam(value = "price", required = false, defaultValue = "NONE") SortDirection priceSorting) {
         List<Movie> movies;
-        OrderBy orderBy = createOrderBy(ratingSorting, priceSorting);
+        MovieRequestParam movieRequestParam = createMovieRequestParam(ratingSorting, priceSorting);
         logger.info("Get all movies");
-        movies = movieService.getAll(orderBy);
+        movies = movieService.getAll(movieRequestParam);
         logger.debug("Returning {} movies", movies.size());
         return movies;
     }
@@ -43,42 +44,37 @@ public class MovieController {
 
     @RequestMapping(value = "/genre/{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public List<Movie> getMoviesByGenre(@PathVariable int id,
-                                        @RequestParam(value = "rating", required = false, defaultValue = "NONE") String ratingSorting,
-                                        @RequestParam(value = "price", required = false, defaultValue = "NONE") String priceSorting) {
+                                        @RequestParam(value = "rating", required = false, defaultValue = "NONE") SortDirection ratingSortDirection,
+                                        @RequestParam(value = "price", required = false, defaultValue = "NONE") SortDirection priceSortDirection) {
         List<Movie> movies;
-        OrderBy orderBy = createOrderBy(ratingSorting, priceSorting);
+        MovieRequestParam requestParam = createMovieRequestParam(ratingSortDirection, priceSortDirection);
         logger.info("Get movies by genre");
-        movies = movieService.getByGenre(id, orderBy);
+        movies = movieService.getByGenre(id, requestParam);
 
         logger.debug("Returning {} movie(s) for genreId {}", movies.size(), id);
         return movies;
     }
 
-    protected OrderBy createOrderBy(String ratingSorting, String priceSorting) {
-        if (NO_ORDER.equals(ratingSorting) && NO_ORDER.equals(priceSorting)) {
+    protected MovieRequestParam createMovieRequestParam(SortDirection ratingSort, SortDirection priceSort) {
+        if (ratingSort == null && priceSort == null) {
             return null;
         }
-
-        String errorMessage = "Invalid sorting parameters";
-
-        if (!NO_ORDER.equals(ratingSorting)) {
-            String ratingSortingUpper = ratingSorting.toUpperCase();
-            if (ratingSortingUpper.equalsIgnoreCase(SortDirection.DESC.name())) {
-                return new OrderBy("rating", SortDirection.DESC);
+        MovieRequestParam movieRequestParam = new MovieRequestParam();
+        if(ratingSort != null){
+            if (SortDirection.DESC.equals(ratingSort)) {
+                movieRequestParam.setRatingSorting(ratingSort);
             } else {
-                logger.warn("Eligible sort direction param {} for rating", ratingSorting);
-                throw new BadRequestParamException(errorMessage);
+                logger.warn("Eligible sort direction param {} for rating", ratingSort);
+                throw new BadRequestParamException("Invalid sorting directing");
             }
-        } else {
-            try {
-                SortDirection sortDirection = SortDirection.valueOf(priceSorting.toUpperCase());
-                return new OrderBy("price", sortDirection);
-            } catch (IllegalArgumentException e) {
-                logger.warn("Invalid sort direction param {} for price", priceSorting);
-                throw new BadRequestParamException(errorMessage);
-            }
-
         }
+        movieRequestParam.setPriceSorting(priceSort);
+        return movieRequestParam;
+    }
+
+    @InitBinder
+    public void initBinder(final WebDataBinder webdataBinder) {
+        webdataBinder.registerCustomEditor(SortDirection.class, new SortDirectionConverter());
     }
 
     @Autowired
