@@ -3,7 +3,7 @@ package com.study.movieland.service.impl;
 import com.study.movieland.dao.MovieDao;
 import com.study.movieland.entity.Genre;
 import com.study.movieland.entity.Movie;
-import com.study.movieland.entity.OrderBy;
+import com.study.movieland.entity.MovieRequestParam;
 import com.study.movieland.service.GenreService;
 import com.study.movieland.service.MovieService;
 import org.slf4j.Logger;
@@ -22,10 +22,10 @@ public class DefaultMovieService implements MovieService {
     private GenreService genreService;
 
     @Override
-    public List<Movie> getAll(OrderBy orderBy) {
+    public List<Movie> getAll(MovieRequestParam movieRequestParam) {
         logger.info("get All Movies");
         long startTime = System.currentTimeMillis();
-        List<Movie> movies = movieDao.getAll(orderBy);
+        List<Movie> movies = movieDao.getAll(movieRequestParam);
         logger.debug("Query took:{}", System.currentTimeMillis() - startTime);
         return movies;
     }
@@ -40,13 +40,13 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Override
-    public List<Movie> getByGenre(int genreId, OrderBy orderBy) {
+    public List<Movie> getByGenre(int genreId, MovieRequestParam movieRequestParam) {
         logger.info("get Movies by Genre", genreId);
         logger.info("check Genre for id {}", genreId);
         Genre genre = genreService.getById(genreId);
         long startTime = System.currentTimeMillis();
         logger.debug("Query took:{}", System.currentTimeMillis() - startTime);
-        return movieDao.getByGenreId(genre.getId(), orderBy);
+        return movieDao.getByGenreId(genre.getId(), movieRequestParam);
     }
 
     @Autowired

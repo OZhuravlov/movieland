@@ -1,7 +1,7 @@
 package com.study.movieland.web.controller;
 
 import com.study.movieland.entity.Movie;
-import com.study.movieland.entity.OrderBy;
+import com.study.movieland.entity.MovieRequestParam;
 import com.study.movieland.entity.SortDirection;
 import com.study.movieland.exception.BadRequestParamException;
 import com.study.movieland.exception.NoDataFoundException;
@@ -115,35 +115,35 @@ public class MovieControllerTest {
     }
 
     @Test
-    public void createOrderByTest() {
+    public void createMovieRequestParamTest() {
         // Sort by rating desc
-        String ratingSorting = "desc";
-        String priceSorting = "NONE";
-        OrderBy orderBy = movieController.createOrderBy(ratingSorting, priceSorting);
-        assertEquals("rating", orderBy.getFieldName());
-        assertEquals(SortDirection.DESC, orderBy.getSortDirection());
+        SortDirection ratingSorting = SortDirection.DESC;
+        SortDirection priceSorting = null;
+        MovieRequestParam movieRequestParam = movieController.createMovieRequestParam(ratingSorting, priceSorting);
+        assertEquals("rating", movieRequestParam.getSortFieldName());
+        assertEquals(SortDirection.DESC, movieRequestParam.getSortDirection());
 
         // Sort by price asc
-        String ratingSorting2 = "NONE";
-        String priceSorting2 = "ASC";
-        OrderBy orderBy2 = movieController.createOrderBy(ratingSorting2, priceSorting2);
-        assertEquals("price", orderBy2.getFieldName());
-        assertEquals(SortDirection.ASC, orderBy2.getSortDirection());
+        SortDirection ratingSorting2 = null;
+        SortDirection priceSorting2 = SortDirection.ASC;
+        MovieRequestParam movieRequestParam2 = movieController.createMovieRequestParam(ratingSorting2, priceSorting2);
+        assertEquals("price", movieRequestParam2.getSortFieldName());
+        assertEquals(SortDirection.ASC, movieRequestParam2.getSortDirection());
 
         // no order
-        String ratingSorting3 = "NONE";
-        String priceSorting3 = "NONE";
-        OrderBy orderBy3 = movieController.createOrderBy(ratingSorting3, priceSorting3);
-        assertNull(orderBy3);
+        SortDirection ratingSorting3 = null;
+        SortDirection priceSorting3 = null;
+        MovieRequestParam movieRequestParam3 = movieController.createMovieRequestParam(ratingSorting3, priceSorting3);
+        assertNull(movieRequestParam3);
 
     }
 
     @Test(expected = BadRequestParamException.class)
-    public void createOrderByBadRequestParamExceptionTest() {
-        // Sort by rating desc
-        String ratingSorting = "bad";
-        String priceSorting = "NONE";
-        movieController.createOrderBy(ratingSorting, priceSorting);
+    public void createMovieRequestParamBadRequestParamExceptionTest() {
+        // Sort by rating ASC
+        SortDirection ratingSorting = SortDirection.ASC;
+        SortDirection priceSorting = null;
+        movieController.createMovieRequestParam(ratingSorting, priceSorting);
     }
 
 }
