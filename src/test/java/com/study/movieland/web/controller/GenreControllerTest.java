@@ -10,6 +10,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,9 +40,16 @@ public class GenreControllerTest {
 
     @Test
     public void getAllGenresTest() throws Exception {
-        List<Genre> genres = Arrays.asList(
-                new Genre(1, "Genre 1"),
-                new Genre(2, "Genre 2"));
+        List<Genre> genres = new ArrayList<Genre>() {{
+            add(Genre.newBuilder()
+                    .setId(1)
+                    .setName("Genre 1")
+                    .build());
+            add(Genre.newBuilder()
+                    .setId(2)
+                    .setName("Genre 2")
+                    .build());
+        }};
         when(genreService.getAll()).thenReturn(genres);
         mockMvc.perform(get("/genre"))
                 .andExpect(status().isOk())

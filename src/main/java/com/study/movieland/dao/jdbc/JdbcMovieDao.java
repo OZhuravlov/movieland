@@ -5,7 +5,6 @@ import com.study.movieland.dao.jdbc.mapper.MovieRowMapper;
 import com.study.movieland.dao.jdbc.util.QueryUtil;
 import com.study.movieland.entity.Movie;
 import com.study.movieland.entity.MovieRequestParam;
-import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,18 +31,14 @@ public class JdbcMovieDao implements MovieDao {
 
     private static final MovieRowMapper MOVIE_ROW_MAPPER = new MovieRowMapper();
 
-    @Autowired
-    @Setter
     private JdbcTemplate jdbcTemplate;
 
-    @Value("${dao.movie.randomCount:3}")
     private int randomCount;
 
     @Override
     public List<Movie> getAll(MovieRequestParam movieRequestParam) {
-        String sql = GET_ALL_SQL;
         logger.info("get All Movies");
-        sql = QueryUtil.addOptionalRequestParamsToQuery(sql, movieRequestParam);
+        String sql = QueryUtil.addOptionalRequestParamsToQuery(GET_ALL_SQL, movieRequestParam);
         logger.debug("get All Movies query {}", sql);
         List<Movie> movies = jdbcTemplate.query(sql, MOVIE_ROW_MAPPER);
         logger.trace("getAll: return List of movies {}", movies);
@@ -60,13 +55,21 @@ public class JdbcMovieDao implements MovieDao {
 
     @Override
     public List<Movie> getByGenreId(int genreId, MovieRequestParam movieRequestParam) {
-        String sql = GET_BY_GENRE_SQL;
         logger.info("get Movies by genreId {}", genreId);
-        sql = QueryUtil.addOptionalRequestParamsToQuery(sql, movieRequestParam);
+        String sql = QueryUtil.addOptionalRequestParamsToQuery(GET_BY_GENRE_SQL, movieRequestParam);
         logger.debug("get Movies by Genre query {}", sql);
         List<Movie> movies = jdbcTemplate.query(sql, MOVIE_ROW_MAPPER, genreId);
         logger.trace("getAll: return List of movies for genreId {}: {}", genreId, movies);
         return movies;
     }
 
+    @Autowired
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @Value("${dao.movie.randomCount:3}")
+    public void setRandomCount(int randomCount) {
+        this.randomCount = randomCount;
+    }
 }

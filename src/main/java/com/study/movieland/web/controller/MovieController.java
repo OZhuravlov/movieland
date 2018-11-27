@@ -49,16 +49,14 @@ public class MovieController {
     public List<Movie> getMoviesByGenre(@PathVariable int id,
                                         @RequestParam(value = "rating", required = false, defaultValue = "NONE") SortDirection ratingSortDirection,
                                         @RequestParam(value = "price", required = false, defaultValue = "NONE") SortDirection priceSortDirection) {
-        List<Movie> movies;
         MovieRequestParam requestParam = createMovieRequestParam(ratingSortDirection, priceSortDirection);
         logger.info("Get movies by genre");
-        movies = movieService.getByGenre(id, requestParam);
-
+        List<Movie> movies = movieService.getByGenre(id, requestParam);
         logger.debug("Returning {} movie(s) for genreId {}", movies.size(), id);
         return movies;
     }
 
-    protected MovieRequestParam createMovieRequestParam(SortDirection ratingSort, SortDirection priceSort) {
+    MovieRequestParam createMovieRequestParam(SortDirection ratingSort, SortDirection priceSort) {
         if (ratingSort == null && priceSort == null) {
             return null;
         }
