@@ -1,6 +1,5 @@
 package com.study.movieland.dao.cache;
 
-import com.google.common.collect.ImmutableMap;
 import com.study.movieland.dao.GenreDao;
 import com.study.movieland.entity.Genre;
 import com.study.movieland.exception.NoDataFoundException;
@@ -11,9 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class CacheGenreDao implements GenreDao {
@@ -21,24 +18,24 @@ public class CacheGenreDao implements GenreDao {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private GenreDao genreDao;
-    volatile private Map<Integer, Genre> genres;
+    private volatile Map<Integer, Genre> genres;
 
     @PostConstruct
     @Scheduled(fixedDelayString = "${scheduler.fixedDelayInMilliseconds}",
             initialDelayString = "${scheduler.initDelayInMilliseconds}")
     public void init() {
         logger.info("Refreshing cache");
-        Collection<Genre> genreList = genreDao.getAll();
+        List<Genre> genreList = genreDao.getAll();
         logger.info("Got {} genres from dao", genreList.size());
         Map<Integer, Genre> genreMap = new HashMap<>();
         genreList.forEach(genre -> genreMap.put(genre.getId(), genre));
-        genres = ImmutableMap.copyOf(genreMap);
+        genres = genreMap;
     }
 
     @Override
-    public Collection<Genre> getAll() {
+    public List<Genre> getAll() {
         logger.info("get All Genres from cache");
-        Collection<Genre> values = genres.values();
+        List<Genre> values = new ArrayList(genres.values());
         logger.debug("getAll: return List of {} Genre instances from cache", genres.values().size());
         return values;
     }

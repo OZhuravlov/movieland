@@ -5,11 +5,9 @@ import com.study.movieland.entity.Genre;
 import com.study.movieland.service.GenreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -20,10 +18,10 @@ public class DefaultGenreService implements GenreService {
     private GenreDao genreDao;
 
     @Override
-    public Collection<Genre> getAll() {
+    public List<Genre> getAll() {
         logger.debug("Service: Get All Genres");
         long startTime = System.currentTimeMillis();
-        Collection<Genre> genres = genreDao.getAll();
+        List<Genre> genres = genreDao.getAll();
         logger.debug("Query took:{}", System.currentTimeMillis() - startTime);
         return genres;
     }

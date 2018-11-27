@@ -12,9 +12,8 @@ public class QueryUtilTest {
     @Test
     public void addOptionalRequestParamsToQueryTest() {
         // no params - no changes
-        MovieRequestParam params = null;
         String sql = "SELECT";
-        String actualSql = QueryUtil.addOptionalRequestParamsToQuery(sql, params);
+        String actualSql = QueryUtil.addOptionalRequestParamsToQuery(sql, null);
         assertEquals(sql, actualSql);
     }
 

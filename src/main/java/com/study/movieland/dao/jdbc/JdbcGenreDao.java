@@ -12,7 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 @Repository
 public class JdbcGenreDao implements GenreDao {
@@ -25,9 +25,9 @@ public class JdbcGenreDao implements GenreDao {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public Collection<Genre> getAll() {
+    public List<Genre> getAll() {
         logger.info("get All Genres");
-        Collection<Genre> genres = jdbcTemplate.query(GET_ALL_SQL, GENRE_ROW_MAPPER);
+        List<Genre> genres = jdbcTemplate.query(GET_ALL_SQL, GENRE_ROW_MAPPER);
         logger.debug("getAll: return List of {} Genre instance", genres);
         return new ArrayList<>(genres);
     }

@@ -12,8 +12,8 @@ public class SortDirectionConverter extends PropertyEditorSupport {
     private static final String DEFAULT_REQUEST_SORT_PARAM_VALUE = "NONE";
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public void setAsText(final String paramValue) throws IllegalArgumentException {
-        if(DEFAULT_REQUEST_SORT_PARAM_VALUE.equalsIgnoreCase(paramValue)){
+    public void setAsText(final String paramValue) {
+        if (DEFAULT_REQUEST_SORT_PARAM_VALUE.equalsIgnoreCase(paramValue)) {
             return;
         }
         try {
