@@ -1,0 +1,4 @@
+[package]
+name = "movieland"
+version = "0.0.1"
+authors = ["Oleksandr Zhuravlov <alex.shadoof@gmail.com>"]
