@@ -1,7 +1,3 @@
-logging:
-   logFilePath: c:/temp/logs
-   logFileMaxSize: 5MB
-
 dao:
    movie:
       randomCount: 3

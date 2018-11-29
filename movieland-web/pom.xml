@@ -39,11 +39,9 @@
 	    <dependency>
             <groupId>com.study</groupId>
             <artifactId>movieland-service-api</artifactId>
+            <version>${project.version}</version>
         </dependency>
-	    <dependency>
-            <groupId>com.study</groupId>
-            <artifactId>movieland-entity</artifactId>
-        </dependency>
+
         <!-- Web -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -63,6 +61,24 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.databind-version}</version>
+        </dependency>
+
+        <!--<Test>-->
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path-assert</artifactId>
+            <version>${jsonpath.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

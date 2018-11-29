@@ -1,7 +1,7 @@
 package com.study.movieland.web.controller;
 
 import com.study.movieland.entity.Genre;
-import com.study.movieland.service.impl.DefaultGenreService;
+import com.study.movieland.service.GenreService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 public class GenreControllerTest {
 
     @Mock
-    DefaultGenreService genreService;
+    GenreService genreService;
 
     @InjectMocks
     GenreController genreController = new GenreController();
