@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+
+	<artifactId>movieland-web</artifactId>
+    <packaging>war</packaging>
+
+    <parent>
+        <groupId>com.study</groupId>
+        <artifactId>movieland</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <spring.version>5.1.1.RELEASE</spring.version>
+        <jackson.databind-version>2.9.7</jackson.databind-version>
+        <servlet-api-version>3.1.0</servlet-api-version>
+        <hamcrest.version>1.3</hamcrest.version>
+        <jsonpath.version>2.2.0</jsonpath.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <path>/</path>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+	    <dependency>
+            <groupId>com.study</groupId>
+            <artifactId>movieland-service-api</artifactId>
+        </dependency>
+	    <dependency>
+            <groupId>com.study</groupId>
+            <artifactId>movieland-entity</artifactId>
+        </dependency>
+        <!-- Web -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet-api-version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!-- JSON -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.databind-version}</version>
+        </dependency>
+    </dependencies>
+</project>
