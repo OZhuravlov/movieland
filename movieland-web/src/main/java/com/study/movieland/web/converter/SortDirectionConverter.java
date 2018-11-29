@@ -1,7 +1,7 @@
 package com.study.movieland.web.converter;
 
 import com.study.movieland.entity.SortDirection;
-import com.study.movieland.exception.BadRequestParamException;
+import com.study.movieland.web.exception.BadRequestParamException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +21,7 @@ public class SortDirectionConverter extends PropertyEditorSupport {
             setValue(sortDirection);
         } catch (IllegalArgumentException e) {
             logger.warn("Invalid sort direction param {}", paramValue);
-            throw new BadRequestParamException("Invalid sort direction param");
+            throw new BadRequestParamException("Invalid sort direction param " + paramValue);
         }
     }
 }

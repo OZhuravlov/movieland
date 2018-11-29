@@ -38,7 +38,7 @@
     <dependencies>
 	    <dependency>
             <groupId>com.study</groupId>
-            <artifactId>movieland-service-api</artifactId>
+            <artifactId>movieland-service-default</artifactId>
             <version>${project.version}</version>
         </dependency>
 

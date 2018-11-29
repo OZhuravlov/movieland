@@ -1,7 +1,6 @@
 package com.study.movieland.dao.jdbc;
 
 import com.study.movieland.dao.jdbc.mapper.MovieRowMapper;
-import com.study.movieland.exception.NoDataFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -20,7 +19,7 @@ public class JdbcGenreDaoTest {
     @InjectMocks
     private JdbcGenreDao jdbcGenreDao = new JdbcGenreDao();
 
-    @Test(expected = NoDataFoundException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testGetByIdNoDataFoundException() {
         Mockito.when(
                 jdbcTemplate.queryForObject(

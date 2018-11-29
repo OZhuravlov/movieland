@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>com.study</groupId>
-            <artifactId>movieland-persistence-api</artifactId>
+            <artifactId>movieland-persistence-jdbc</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

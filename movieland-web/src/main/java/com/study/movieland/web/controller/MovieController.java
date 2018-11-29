@@ -3,9 +3,9 @@ package com.study.movieland.web.controller;
 import com.study.movieland.entity.Movie;
 import com.study.movieland.entity.MovieRequestParam;
 import com.study.movieland.entity.SortDirection;
-import com.study.movieland.exception.BadRequestParamException;
 import com.study.movieland.service.MovieService;
 import com.study.movieland.web.converter.SortDirectionConverter;
+import com.study.movieland.web.exception.BadRequestParamException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ public class MovieController {
             return null;
         }
         MovieRequestParam movieRequestParam = new MovieRequestParam();
-        if(ratingSort != null){
+        if (ratingSort != null) {
             if (SortDirection.DESC.equals(ratingSort)) {
                 movieRequestParam.setSortFieldName(RATING_FIELD_NAME);
                 movieRequestParam.setSortDirection(ratingSort);

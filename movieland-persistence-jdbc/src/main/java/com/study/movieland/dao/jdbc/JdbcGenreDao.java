@@ -3,7 +3,6 @@ package com.study.movieland.dao.jdbc;
 import com.study.movieland.dao.GenreDao;
 import com.study.movieland.dao.jdbc.mapper.GenreRowMapper;
 import com.study.movieland.entity.Genre;
-import com.study.movieland.exception.NoDataFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,7 @@ public class JdbcGenreDao implements GenreDao {
     }
 
     @Override
-    public Genre getById(int id) throws NoDataFoundException {
+    public Genre getById(int id) throws IllegalArgumentException {
         try {
             logger.info("getting genre by id {}", id);
             Genre genre = jdbcTemplate.queryForObject(GET_BY_ID_SQL, GENRE_ROW_MAPPER, id);
@@ -41,7 +40,7 @@ public class JdbcGenreDao implements GenreDao {
         } catch (IncorrectResultSizeDataAccessException e) {
             String warnMessage = "Not such genre with id " + id;
             logger.warn(warnMessage);
-            throw new NoDataFoundException(warnMessage, e);
+            throw new IllegalArgumentException(warnMessage, e);
         }
     }
 

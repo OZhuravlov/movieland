@@ -1,10 +1,11 @@
 package com.study.movieland.web.converter;
 
 import com.study.movieland.entity.SortDirection;
-import com.study.movieland.exception.BadRequestParamException;
+import com.study.movieland.web.exception.BadRequestParamException;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class SortDirectionConverterTest {
 
@@ -14,17 +15,17 @@ public class SortDirectionConverterTest {
 
         String param = "NONE";
         converter.setAsText(param);
-        SortDirection sortDirection = (SortDirection)converter.getValue();
+        SortDirection sortDirection = (SortDirection) converter.getValue();
         assertNull(sortDirection);
 
         String param2 = "asc";
         converter.setAsText(param2);
-        SortDirection sortDirection2 = (SortDirection)converter.getValue();
+        SortDirection sortDirection2 = (SortDirection) converter.getValue();
         assertEquals(SortDirection.ASC, sortDirection2);
 
         String param3 = "desc";
         converter.setAsText(param3);
-        SortDirection sortDirection3 = (SortDirection)converter.getValue();
+        SortDirection sortDirection3 = (SortDirection) converter.getValue();
         assertEquals(SortDirection.DESC, sortDirection3);
 
     }

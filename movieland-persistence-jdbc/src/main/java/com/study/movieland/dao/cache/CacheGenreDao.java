@@ -2,7 +2,6 @@ package com.study.movieland.dao.cache;
 
 import com.study.movieland.dao.GenreDao;
 import com.study.movieland.entity.Genre;
-import com.study.movieland.exception.NoDataFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -10,7 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class CacheGenreDao implements GenreDao {
@@ -41,13 +43,13 @@ public class CacheGenreDao implements GenreDao {
     }
 
     @Override
-    public Genre getById(int id) throws NoDataFoundException {
+    public Genre getById(int id) throws IllegalArgumentException {
         logger.info("getting genre by id {} from cache", id);
         Genre genre = genres.get(id);
         if (genre == null) {
             String warnMessage = "Not such genre with id " + id + " in cache";
             logger.warn(warnMessage);
-            throw new NoDataFoundException(warnMessage);
+            throw new IllegalArgumentException(warnMessage);
         }
         return genre;
     }

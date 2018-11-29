@@ -3,8 +3,8 @@ package com.study.movieland.web.controller;
 import com.study.movieland.entity.Movie;
 import com.study.movieland.entity.MovieRequestParam;
 import com.study.movieland.entity.SortDirection;
-import com.study.movieland.exception.BadRequestParamException;
 import com.study.movieland.service.MovieService;
+import com.study.movieland.web.exception.BadRequestParamException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -102,16 +102,6 @@ public class MovieControllerTest {
         verify(movieService, times(1)).getByGenre(id, null);
         verifyNoMoreInteractions(movieService);
     }
-
-//    @Test
-//    public void getMoviesByGenre_NoDataFoundExceptionTest() throws Exception {
-//        int id = 0;
-//        when(movieService.getByGenre(id, null)).thenThrow(new IllegalArgumentException("No such genre"));
-//        mockMvc.perform(get("/movie/genre/" + id))
-//                .andExpect(status().isNotFound());
-//        verify(movieService, times(1)).getByGenre(id, null);
-//        verifyNoMoreInteractions(movieService);
-//    }
 
     @Test
     public void createMovieRequestParamTest() {

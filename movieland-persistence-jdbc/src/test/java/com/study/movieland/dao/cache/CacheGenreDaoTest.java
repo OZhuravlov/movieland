@@ -2,7 +2,6 @@ package com.study.movieland.dao.cache;
 
 import com.study.movieland.dao.GenreDao;
 import com.study.movieland.entity.Genre;
-import com.study.movieland.exception.NoDataFoundException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,8 +39,8 @@ public class CacheGenreDaoTest {
         assertThat(genre, is(stubGenreDao.getAll().get(1)));
     }
 
-    @Test(expected = NoDataFoundException.class)
-    public void getByIdNoDataFoundExceptionTest() {
+    @Test(expected = IllegalArgumentException.class)
+    public void getByIdIllegalArgumentExceptionTest() {
         genreDao.init();
         genreDao.getById(100);
     }
