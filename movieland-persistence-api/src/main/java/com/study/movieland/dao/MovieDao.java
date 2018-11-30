@@ -12,4 +12,11 @@ public interface MovieDao {
     List<Movie> getRandom();
 
     List<Movie> getByGenreId(int genreId, MovieRequestParam movieRequestParam);
+
+    Movie getById(int id);
+
+    List<Integer> getGenreIds(int id);
+
+    List<Integer> getCountryIds(int id);
+
 }

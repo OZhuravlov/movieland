@@ -6,8 +6,8 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class MovieRowMapper implements RowMapper<Movie> {
-    // id, name_native, name_russian, year_of_release, rating, price, picture_path
+public class MovieByIdRowMapper implements RowMapper<Movie> {
+    // id, name_native, name_russian, year_of_release, description, rating, price, picture_path
     @Override
     public Movie mapRow(ResultSet rs, int rowNum) throws SQLException {
         Movie movie = new Movie();
@@ -18,6 +18,7 @@ public class MovieRowMapper implements RowMapper<Movie> {
         movie.setRating(rs.getDouble("rating"));
         movie.setPrice(rs.getDouble("price"));
         movie.setPicturePath(rs.getString("picture_path"));
+        movie.setDescription(rs.getString("description"));
         return movie;
     }
 }

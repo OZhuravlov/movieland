@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.servlet.http.HttpServletRequest;
-
 @ControllerAdvice
 class GlobalControllerExceptionHandler {
 
@@ -18,16 +16,16 @@ class GlobalControllerExceptionHandler {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @ResponseStatus(value=HttpStatus.NOT_FOUND, reason=NOT_FOUND_MESSAGE)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = NOT_FOUND_MESSAGE)
     @ExceptionHandler(IllegalArgumentException.class)
-    public String handleIllegalArgumentException(Exception e){
+    public String handleIllegalArgumentException(Exception e) {
         logger.warn(e.getMessage());
         return e.getMessage();
     }
 
-    @ResponseStatus(value= HttpStatus.BAD_REQUEST, reason=BAD_REQUEST_MESSAGE)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = BAD_REQUEST_MESSAGE)
     @ExceptionHandler(BadRequestParamException.class)
-    public String handleBadRequestParamException(Exception e){
+    public String handleBadRequestParamException(Exception e) {
         logger.warn(e.getMessage());
         return e.getMessage();
     }

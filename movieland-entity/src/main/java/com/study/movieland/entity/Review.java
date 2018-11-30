@@ -3,7 +3,8 @@ package com.study.movieland.entity;
 import lombok.Data;
 
 @Data
-public class Country {
+public class Review {
     private int id;
-    private String name;
+    private User user;
+    private String text;
 }

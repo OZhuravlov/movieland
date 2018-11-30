@@ -1,6 +1,7 @@
 package com.study.movieland.dao.jdbc;
 
 import com.study.movieland.dao.MovieDao;
+import com.study.movieland.dao.jdbc.mapper.MovieByIdRowMapper;
 import com.study.movieland.dao.jdbc.mapper.MovieRowMapper;
 import com.study.movieland.dao.jdbc.util.QueryUtil;
 import com.study.movieland.entity.Movie;
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -16,8 +18,6 @@ import java.util.List;
 
 @Repository
 public class JdbcMovieDao implements MovieDao {
-
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final String GET_ALL_SQL =
             "SELECT id, name_native, name_russian, year_of_release, rating, price, picture_path FROM movies";
@@ -28,9 +28,15 @@ public class JdbcMovieDao implements MovieDao {
                     "  FROM movies m" +
                     "  JOIN movie_genres mg ON mg.movie_id = m.id" +
                     " WHERE mg.genre_id = ?";
-
+    private static final String GET_BY_ID_SQL =
+            "SELECT id, name_native, name_russian, year_of_release, description, rating, price, picture_path" +
+                    "  FROM movies" +
+                    " WHERE id = ?";
+    private static final String GET_GENRE_IDS_FOR_MOVIE_SQL = "SELECT genre_id FROM movie_genres WHERE movie_id = ?";
+    private static final String GET_COUNTRY_IDS_FOR_MOVIE_SQL = "SELECT country_id FROM movie_countries WHERE movie_id = ?";
     private static final MovieRowMapper MOVIE_ROW_MAPPER = new MovieRowMapper();
-
+    private static final MovieByIdRowMapper MOVIE_BY_ID_ROW_MAPPER = new MovieByIdRowMapper();
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private JdbcTemplate jdbcTemplate;
 
     private int randomCount;
@@ -61,6 +67,36 @@ public class JdbcMovieDao implements MovieDao {
         List<Movie> movies = jdbcTemplate.query(sql, MOVIE_ROW_MAPPER, genreId);
         logger.trace("getAll: return List of movies for genreId {}: {}", genreId, movies);
         return movies;
+    }
+
+    @Override
+    public Movie getById(int id) {
+        try {
+            logger.info("get Movies by Id {}", id);
+            Movie movie = jdbcTemplate.queryForObject(GET_BY_ID_SQL, MOVIE_BY_ID_ROW_MAPPER, id);
+            logger.trace("getAll: return List of movies for genreId {}: {}", id, movie);
+            return movie;
+        } catch (IncorrectResultSizeDataAccessException e) {
+            String warnMessage = "Not such movie with id " + id;
+            logger.warn(warnMessage);
+            throw new IllegalArgumentException(warnMessage, e);
+        }
+    }
+
+    @Override
+    public List<Integer> getGenreIds(int id) {
+        logger.info("get Genre Ids by movieId {}", id);
+        List<Integer> genreIds = jdbcTemplate.queryForList(GET_GENRE_IDS_FOR_MOVIE_SQL, Integer.class, id);
+        logger.trace("getGenreIds: return List of genre Ids for movieId {}: {}", id, genreIds);
+        return genreIds;
+    }
+
+    @Override
+    public List<Integer> getCountryIds(int id) {
+        logger.info("get CountryIds by movieId {}", id);
+        List<Integer> countryIds = jdbcTemplate.queryForList(GET_COUNTRY_IDS_FOR_MOVIE_SQL, Integer.class, id);
+        logger.trace("getCountryIds: return List of country Ids for movieId {}: {}", id, countryIds);
+        return countryIds;
     }
 
     @Autowired

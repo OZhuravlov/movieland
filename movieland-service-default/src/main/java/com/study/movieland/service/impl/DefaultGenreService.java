@@ -2,12 +2,15 @@ package com.study.movieland.service.impl;
 
 import com.study.movieland.dao.GenreDao;
 import com.study.movieland.entity.Genre;
+import com.study.movieland.entity.Movie;
 import com.study.movieland.service.GenreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,7 +22,7 @@ public class DefaultGenreService implements GenreService {
 
     @Override
     public List<Genre> getAll() {
-        logger.debug("Service: Get All Genres");
+        logger.debug("Get All Genres");
         long startTime = System.currentTimeMillis();
         List<Genre> genres = genreDao.getAll();
         logger.debug("Query took:{}", System.currentTimeMillis() - startTime);
@@ -28,11 +31,26 @@ public class DefaultGenreService implements GenreService {
 
     @Override
     public Genre getById(int id) {
-        logger.debug("Service: Get Genre by Id");
+        logger.debug("Get Genre by Id");
         return genreDao.getById(id);
     }
 
-    @Resource(name = "cacheGenreDao")
+    @Override
+    public void enrichMovie(Movie movie, List<Integer> genreIds) {
+        if (genreIds == null) {
+            return;
+        }
+        logger.debug("Enrich Movie with genres");
+        List<Genre> genres = new ArrayList<>();
+        for (Integer countryId : genreIds) {
+            genres.add(getById(countryId));
+        }
+        logger.trace("Enrich Movie id {} with genres: {}", movie.getId(), genres);
+        movie.setGenres(genres);
+    }
+
+    @Autowired
+    @Qualifier("cacheGenreDao")
     public void setGenreDao(GenreDao genreDao) {
         this.genreDao = genreDao;
     }

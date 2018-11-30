@@ -7,21 +7,23 @@ public class Genre {
     private int id;
     private String name;
 
-    private Genre(){}
+    private Genre() {
+    }
 
     public static Builder newBuilder() {
         return new Genre().new Builder();
     }
 
-    public class Builder{
-        private Builder(){}
+    public class Builder {
+        private Builder() {
+        }
 
-        public Builder setId(int id){
+        public Builder setId(int id) {
             Genre.this.id = id;
             return this;
         }
 
-        public Builder setName(String name){
+        public Builder setName(String name) {
             Genre.this.name = name;
             return this;
         }

@@ -16,11 +16,10 @@ import java.util.List;
 @Repository
 public class JdbcGenreDao implements GenreDao {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
     private static final String GET_ALL_SQL = "SELECT id, name FROM genres";
     private static final String GET_BY_ID_SQL = "SELECT id, name FROM genres WHERE id = ?";
     private static final GenreRowMapper GENRE_ROW_MAPPER = new GenreRowMapper();
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private JdbcTemplate jdbcTemplate;
 
     @Override
@@ -32,7 +31,7 @@ public class JdbcGenreDao implements GenreDao {
     }
 
     @Override
-    public Genre getById(int id) throws IllegalArgumentException {
+    public Genre getById(int id) {
         try {
             logger.info("getting genre by id {}", id);
             Genre genre = jdbcTemplate.queryForObject(GET_BY_ID_SQL, GENRE_ROW_MAPPER, id);

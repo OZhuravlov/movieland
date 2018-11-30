@@ -4,11 +4,12 @@ import com.study.movieland.dao.GenreDao;
 import com.study.movieland.entity.Genre;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +44,7 @@ public class CacheGenreDao implements GenreDao {
     }
 
     @Override
-    public Genre getById(int id) throws IllegalArgumentException {
+    public Genre getById(int id) {
         logger.info("getting genre by id {} from cache", id);
         Genre genre = genres.get(id);
         if (genre == null) {
@@ -54,7 +55,8 @@ public class CacheGenreDao implements GenreDao {
         return genre;
     }
 
-    @Resource(name = "jdbcGenreDao")
+    @Autowired
+    @Qualifier("jdbcGenreDao")
     public void setGenreDao(GenreDao genreDao) {
         this.genreDao = genreDao;
     }

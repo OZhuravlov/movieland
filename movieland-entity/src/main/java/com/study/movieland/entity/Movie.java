@@ -13,12 +13,13 @@ public class Movie {
     private String nameNative;
     private String nameRussian;
     private int yearOfRelease;
-    private List<Country> countryList;
-    private List<Genre> genreList;
+    private List<Country> countries;
+    private List<Genre> genres;
     private String description;
     private Double rating;
     private Double price;
     private String picturePath;
+    private List<Review> reviews;
 
     public Movie(int id, String nameNative, String nameRussian, int yearOfRelease, Double rating, Double price, String picturePath) {
         this.id = id;
