@@ -16,12 +16,12 @@ public class SortDirectionConverter extends PropertyEditorSupport {
         if (DEFAULT_REQUEST_SORT_PARAM_VALUE.equalsIgnoreCase(paramValue)) {
             return;
         }
-        try {
-            SortDirection sortDirection = SortDirection.valueOf(paramValue.toUpperCase());
-            setValue(sortDirection);
-        } catch (IllegalArgumentException e) {
+        SortDirection sortDirection = SortDirection.getValue(paramValue);
+        if (sortDirection == null) {
             logger.warn("Invalid sort direction param {}", paramValue);
             throw new BadRequestParamException("Invalid sort direction param " + paramValue);
         }
+        setValue(sortDirection);
     }
+
 }

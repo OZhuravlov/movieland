@@ -15,8 +15,4 @@ public interface MovieDao {
 
     Movie getById(int id);
 
-    List<Integer> getGenreIds(int id);
-
-    List<Integer> getCountryIds(int id);
-
 }

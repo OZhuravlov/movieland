@@ -57,15 +57,9 @@ public class DefaultMovieService implements MovieService {
     public Movie getById(int id) {
         logger.info("get Movies by id {}", id);
         Movie movie = movieDao.getById(id);
-
-        List<Integer> countryIds = movieDao.getCountryIds(id);
-        countryService.enrichMovie(movie, countryIds);
-
-        List<Integer> genreIds = movieDao.getGenreIds(id);
-        genreService.enrichMovie(movie, genreIds);
-
+        countryService.enrichMovie(movie);
+        genreService.enrichMovie(movie);
         reviewService.enrichMovie(movie);
-
         return movie;
     }
 

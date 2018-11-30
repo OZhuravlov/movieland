@@ -1,8 +1,5 @@
 package com.study.movieland.web.controller;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study.movieland.entity.Movie;
 import com.study.movieland.entity.MovieRequestParam;
 import com.study.movieland.entity.SortDirection;
@@ -24,10 +21,6 @@ public class MovieController {
 
     private static final String RATING_FIELD_NAME = "rating";
     private static final String PRICE_FIELD_NAME = "price";
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-    {
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-    }
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -64,12 +57,11 @@ public class MovieController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public String getMoviesById(@PathVariable int id) throws JsonProcessingException {
+    public Movie getMoviesById(@PathVariable int id) {
         logger.info("Get movies by id {}", id);
         Movie movie = movieService.getById(id);
-        String jsonString = objectMapper.writeValueAsString(movie);
         logger.trace("Returning movie {}", movie);
-        return jsonString;
+        return movie;
     }
 
     MovieRequestParam createMovieRequestParam(SortDirection ratingSort, SortDirection priceSort) {

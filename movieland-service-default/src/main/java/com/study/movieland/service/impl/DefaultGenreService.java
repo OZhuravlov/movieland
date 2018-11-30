@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,15 +35,10 @@ public class DefaultGenreService implements GenreService {
     }
 
     @Override
-    public void enrichMovie(Movie movie, List<Integer> genreIds) {
-        if (genreIds == null) {
-            return;
-        }
+    public void enrichMovie(Movie movie) {
         logger.debug("Enrich Movie with genres");
-        List<Genre> genres = new ArrayList<>();
-        for (Integer countryId : genreIds) {
-            genres.add(getById(countryId));
-        }
+        List<Genre> genres = genreDao.getByMovieId(movie.getId());
+        movie.setGenres(genres);
         logger.trace("Enrich Movie id {} with genres: {}", movie.getId(), genres);
         movie.setGenres(genres);
     }

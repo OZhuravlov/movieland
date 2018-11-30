@@ -66,5 +66,10 @@ public class CacheGenreDaoTest {
         public Genre getById(int id) {
             return genres.get(id);
         }
+
+        @Override
+        public List<Genre> getByMovieId(int movieId) {
+            return genres;
+        }
     }
 }

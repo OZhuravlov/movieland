@@ -5,7 +5,7 @@ import com.study.movieland.entity.Genre;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
+@Primary
 public class CacheGenreDao implements GenreDao {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -55,8 +56,15 @@ public class CacheGenreDao implements GenreDao {
         return genre;
     }
 
+    @Override
+    public List<Genre> getByMovieId(int movieId) {
+        logger.info("getting genres by movieId from jdbc through cache{}", movieId);
+        List<Genre> genres = genreDao.getByMovieId(movieId);
+        logger.trace("get genres: {}", genres);
+        return genres;
+    }
+
     @Autowired
-    @Qualifier("jdbcGenreDao")
     public void setGenreDao(GenreDao genreDao) {
         this.genreDao = genreDao;
     }

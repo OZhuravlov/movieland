@@ -22,8 +22,8 @@ public class DefaultReviewService implements ReviewService {
     public void enrichMovie(Movie movie) {
         logger.debug("Enrich Movie with reviews");
         List<Review> reviews = reviewDao.getByMovieId(movie.getId());
-        logger.trace("Enrich Movie id {} with reviews: {}", movie.getId(), reviews);
         movie.setReviews(reviews);
+        logger.trace("Enrich Movie id {} with reviews: {}", movie.getId(), reviews);
     }
 
     @Autowired

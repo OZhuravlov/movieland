@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,18 +19,13 @@ public class DefaultCountryService implements CountryService {
     private CountryDao countryDao;
 
     @Override
-    public void enrichMovie(Movie movie, List<Integer> countryIds) {
-        if (countryIds == null) {
-            return;
-        }
+    public void enrichMovie(Movie movie) {
         logger.debug("Enrich Movie with countries");
-        List<Country> countries = new ArrayList<>();
-        for (Integer countryId : countryIds) {
-            countries.add(countryDao.getById(countryId));
-        }
-        logger.trace("Enrich Movie id {} with countries: {}", movie.getId(), countries);
+        List<Country> countries = countryDao.getByMovieId(movie.getId());
         movie.setCountries(countries);
+        logger.trace("Enrich Movie id {} with countries: {}", movie.getId(), countries);
     }
+
 
     @Autowired
     public void setCountryDao(CountryDao countryDao) {

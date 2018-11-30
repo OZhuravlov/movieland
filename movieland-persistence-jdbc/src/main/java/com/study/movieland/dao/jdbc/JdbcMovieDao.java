@@ -32,8 +32,6 @@ public class JdbcMovieDao implements MovieDao {
             "SELECT id, name_native, name_russian, year_of_release, description, rating, price, picture_path" +
                     "  FROM movies" +
                     " WHERE id = ?";
-    private static final String GET_GENRE_IDS_FOR_MOVIE_SQL = "SELECT genre_id FROM movie_genres WHERE movie_id = ?";
-    private static final String GET_COUNTRY_IDS_FOR_MOVIE_SQL = "SELECT country_id FROM movie_countries WHERE movie_id = ?";
     private static final MovieRowMapper MOVIE_ROW_MAPPER = new MovieRowMapper();
     private static final MovieByIdRowMapper MOVIE_BY_ID_ROW_MAPPER = new MovieByIdRowMapper();
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -81,22 +79,6 @@ public class JdbcMovieDao implements MovieDao {
             logger.warn(warnMessage);
             throw new IllegalArgumentException(warnMessage, e);
         }
-    }
-
-    @Override
-    public List<Integer> getGenreIds(int id) {
-        logger.info("get Genre Ids by movieId {}", id);
-        List<Integer> genreIds = jdbcTemplate.queryForList(GET_GENRE_IDS_FOR_MOVIE_SQL, Integer.class, id);
-        logger.trace("getGenreIds: return List of genre Ids for movieId {}: {}", id, genreIds);
-        return genreIds;
-    }
-
-    @Override
-    public List<Integer> getCountryIds(int id) {
-        logger.info("get CountryIds by movieId {}", id);
-        List<Integer> countryIds = jdbcTemplate.queryForList(GET_COUNTRY_IDS_FOR_MOVIE_SQL, Integer.class, id);
-        logger.trace("getCountryIds: return List of country Ids for movieId {}: {}", id, countryIds);
-        return countryIds;
     }
 
     @Autowired

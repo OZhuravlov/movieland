@@ -115,17 +115,32 @@ public class MovieControllerTest {
         mockMvc.perform(get("/movie/" + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(movie.getId())))
-                .andExpect(jsonPath("$[0].nameNative", is(movie.getNameNative())))
-                .andExpect(jsonPath("$[0].nameNative", is(movie.getNameRussian())))
-                .andExpect(jsonPath("$[0].yearOfRelease", is(movie.getYearOfRelease())))
-                .andExpect(jsonPath("$[0].description", is(movie.getDescription())))
-                .andExpect(jsonPath("$[0].rating", is(movie.getRating())))
-                .andExpect(jsonPath("$[0].price", is(movie.getPrice())))
-                .andExpect(jsonPath("$[0].picturePath", is(movie.getPicturePath())))
-                .andExpect(jsonPath("$[0].countries[0]", is(movie.getCountries().get(0))));
-        verify(movieService, times(1)).getByGenre(id, null);
+                .andExpect(jsonPath("$.id", is(movie.getId())))
+                .andExpect(jsonPath("$.nameNative", is(movie.getNameNative())))
+                .andExpect(jsonPath("$.nameRussian", is(movie.getNameRussian())))
+                .andExpect(jsonPath("$.yearOfRelease", is(movie.getYearOfRelease())))
+                .andExpect(jsonPath("$.description", is(movie.getDescription())))
+                .andExpect(jsonPath("$.rating", is(movie.getRating())))
+                .andExpect(jsonPath("$.price", is(movie.getPrice())))
+                .andExpect(jsonPath("$.picturePath", is(movie.getPicturePath())))
+                .andExpect(jsonPath("$.countries[0].id", is(movie.getCountries().get(0).getId())))
+                .andExpect(jsonPath("$.countries[0].name", is(movie.getCountries().get(0).getName())))
+                .andExpect(jsonPath("$.countries[1].id", is(movie.getCountries().get(1).getId())))
+                .andExpect(jsonPath("$.countries[1].name", is(movie.getCountries().get(1).getName())))
+                .andExpect(jsonPath("$.genres[0].id", is(movie.getGenres().get(0).getId())))
+                .andExpect(jsonPath("$.genres[0].name", is(movie.getGenres().get(0).getName())))
+                .andExpect(jsonPath("$.genres[1].id", is(movie.getGenres().get(1).getId())))
+                .andExpect(jsonPath("$.genres[1].name", is(movie.getGenres().get(1).getName())))
+                .andExpect(jsonPath("$.reviews[0].id", is(movie.getReviews().get(0).getId())))
+                .andExpect(jsonPath("$.reviews[0].text", is(movie.getReviews().get(0).getText())))
+                .andExpect(jsonPath("$.reviews[0].user.id", is(movie.getReviews().get(0).getUser().getId())))
+                .andExpect(jsonPath("$.reviews[0].user.nickname", is(movie.getReviews().get(0).getUser().getNickname())))
+                .andExpect(jsonPath("$.reviews[1].id", is(movie.getReviews().get(1).getId())))
+                .andExpect(jsonPath("$.reviews[1].text", is(movie.getReviews().get(1).getText())))
+                .andExpect(jsonPath("$.reviews[1].user.id", is(movie.getReviews().get(1).getUser().getId())))
+                .andExpect(jsonPath("$.reviews[1].user.nickname", is(movie.getReviews().get(1).getUser().getNickname())))
+        ;
+        verify(movieService, times(1)).getById(id);
         verifyNoMoreInteractions(movieService);
     }
 
@@ -164,7 +179,7 @@ public class MovieControllerTest {
 
     private List<Country> getMockCountries() {
         List<Country> countries = new ArrayList<>();
-        for (int i = 1; i < 3; i++) {
+        for (int i = 1; i <= 2; i++) {
             Country country = new Country();
             country.setId(i);
             country.setName("Name " + i);
@@ -175,7 +190,7 @@ public class MovieControllerTest {
 
     private List<Genre> getMockGenres() {
         List<Genre> genres = new ArrayList<>();
-        for (int i = 1; i < 3; i++) {
+        for (int i = 1; i <= 2; i++) {
             genres.add(Genre.newBuilder()
                     .setId(i)
                     .setName("Name " + i)

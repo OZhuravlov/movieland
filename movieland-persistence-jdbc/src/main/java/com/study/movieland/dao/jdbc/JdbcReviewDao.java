@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -24,9 +23,10 @@ public class JdbcReviewDao implements ReviewDao {
 
     @Override
     public List<Review> getByMovieId(int movieId) {
-        logger.info("getting review by movieId {}", movieId);
+        logger.info("getting reviews by movieId {}", movieId);
         List<Review> reviews = jdbcTemplate.query(GET_BY_MOVIE_ID_SQL, REVIEW_ROW_MAPPER, movieId);
-        return new ArrayList<>(reviews);
+        logger.trace("get reviews: {}", reviews);
+        return reviews;
     }
 
     @Autowired
