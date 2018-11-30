@@ -1,8 +1,6 @@
 package com.study.movieland.web.controller;
 
-import com.study.movieland.entity.Movie;
-import com.study.movieland.entity.MovieRequestParam;
-import com.study.movieland.entity.SortDirection;
+import com.study.movieland.entity.*;
 import com.study.movieland.service.MovieService;
 import com.study.movieland.web.exception.BadRequestParamException;
 import org.junit.Before;
@@ -13,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -85,7 +84,7 @@ public class MovieControllerTest {
     }
 
     @Test
-    public void getMoviesByGenre_OKTest() throws Exception {
+    public void getMoviesByGenreTest() throws Exception {
         int id = 1;
         List<Movie> movies = Arrays.asList(
                 new Movie(1, "Movie 1", "Фильм 1", 2001, 1.21, 23.41, "path/to/picture/1"),
@@ -99,6 +98,33 @@ public class MovieControllerTest {
                 .andExpect(jsonPath("$[0].nameNative", is("Movie 1")))
                 .andExpect(jsonPath("$[1].id", is(2)))
                 .andExpect(jsonPath("$[1].nameRussian", is("Фильм 2")));
+        verify(movieService, times(1)).getByGenre(id, null);
+        verifyNoMoreInteractions(movieService);
+    }
+
+    @Test
+    public void getMoviesByIdTest() throws Exception {
+        int id = 1;
+        Movie movie = new Movie(1, "Movie 1", "Фильм 1", 2001, 1.21, 23.41, "path/to/picture/1");
+        movie.setDescription("Description 1");
+        movie.setCountries(getMockCountries());
+        movie.setGenres(getMockGenres());
+        movie.setReviews(getMockReviews());
+
+        when(movieService.getById(id)).thenReturn(movie);
+        mockMvc.perform(get("/movie/" + id))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(movie.getId())))
+                .andExpect(jsonPath("$[0].nameNative", is(movie.getNameNative())))
+                .andExpect(jsonPath("$[0].nameNative", is(movie.getNameRussian())))
+                .andExpect(jsonPath("$[0].yearOfRelease", is(movie.getYearOfRelease())))
+                .andExpect(jsonPath("$[0].description", is(movie.getDescription())))
+                .andExpect(jsonPath("$[0].rating", is(movie.getRating())))
+                .andExpect(jsonPath("$[0].price", is(movie.getPrice())))
+                .andExpect(jsonPath("$[0].picturePath", is(movie.getPicturePath())))
+                .andExpect(jsonPath("$[0].countries[0]", is(movie.getCountries().get(0))));
         verify(movieService, times(1)).getByGenre(id, null);
         verifyNoMoreInteractions(movieService);
     }
@@ -133,6 +159,44 @@ public class MovieControllerTest {
         SortDirection ratingSorting = SortDirection.ASC;
         SortDirection priceSorting = null;
         movieController.createMovieRequestParam(ratingSorting, priceSorting);
+    }
+
+
+    private List<Country> getMockCountries() {
+        List<Country> countries = new ArrayList<>();
+        for (int i = 1; i < 3; i++) {
+            Country country = new Country();
+            country.setId(i);
+            country.setName("Name " + i);
+            countries.add(country);
+        }
+        return countries;
+    }
+
+    private List<Genre> getMockGenres() {
+        List<Genre> genres = new ArrayList<>();
+        for (int i = 1; i < 3; i++) {
+            genres.add(Genre.newBuilder()
+                    .setId(i)
+                    .setName("Name " + i)
+                    .build());
+        }
+        return genres;
+    }
+
+    private List<Review> getMockReviews() {
+        List<Review> reviews = new ArrayList<>();
+        for (int i = 1; i <= 2; i++) {
+            Review review = new Review();
+            review.setId(i);
+            review.setText("Text " + i);
+            User user = new User();
+            user.setId(1);
+            user.setNickname("Nickname 1");
+            review.setUser(user);
+            reviews.add(review);
+        }
+        return reviews;
     }
 
 }
