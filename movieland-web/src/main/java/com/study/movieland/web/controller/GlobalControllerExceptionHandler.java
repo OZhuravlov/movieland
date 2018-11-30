@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-class GlobalControllerExceptionHandler {
+public class GlobalControllerExceptionHandler {
 
     private final static String NOT_FOUND_MESSAGE = "Requested Data Not Found";
     private final static String BAD_REQUEST_MESSAGE = "Bad Request params";
@@ -19,15 +19,15 @@ class GlobalControllerExceptionHandler {
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = NOT_FOUND_MESSAGE)
     @ExceptionHandler(IllegalArgumentException.class)
     public String handleIllegalArgumentException(Exception e) {
-        logger.warn(e.getMessage());
-        return e.getMessage();
+        logger.warn("Error: {}",e);
+        return "{\"error\": " + e.getMessage() + "}";
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = BAD_REQUEST_MESSAGE)
     @ExceptionHandler(BadRequestParamException.class)
     public String handleBadRequestParamException(Exception e) {
-        logger.warn(e.getMessage());
-        return e.getMessage();
+        logger.warn("Error: {}",e);
+        return "{\"error\": " + e.getMessage() + "}";
     }
 
 }
