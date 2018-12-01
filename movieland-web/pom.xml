@@ -41,12 +41,6 @@
             <version>${spring.version}</version>
         </dependency>
 
-        <!-- Yaml -->
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-        </dependency>
-
         <!-- DB -->
         <dependency>
             <groupId>org.apache.commons</groupId>

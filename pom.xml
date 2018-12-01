@@ -34,7 +34,6 @@
         <servlet-api-version>3.1.0</servlet-api-version>
         <hamcrest.version>1.3</hamcrest.version>
         <jsonpath.version>2.2.0</jsonpath.version>
-        <yaml.version>1.23</yaml.version>
     </properties>
 
     <build>
@@ -101,13 +100,6 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-webmvc</artifactId>
                 <version>${spring.version}</version>
-            </dependency>
-
-            <!-- Yaml -->
-            <dependency>
-                <groupId>org.yaml</groupId>
-                <artifactId>snakeyaml</artifactId>
-                <version>${yaml.version}</version>
             </dependency>
 
             <!-- DB -->
