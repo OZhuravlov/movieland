@@ -1,9 +1,11 @@
 package com.study.movieland.web.controller;
 
+import com.study.movieland.data.MovieRequestParam;
+import com.study.movieland.data.SortDirection;
+import com.study.movieland.entity.Currency;
 import com.study.movieland.entity.Movie;
-import com.study.movieland.entity.MovieRequestParam;
-import com.study.movieland.entity.SortDirection;
 import com.study.movieland.service.MovieService;
+import com.study.movieland.web.converter.CurrencyParamConverter;
 import com.study.movieland.web.converter.SortDirectionConverter;
 import com.study.movieland.web.exception.BadRequestParamException;
 import org.slf4j.Logger;
@@ -47,19 +49,22 @@ public class MovieController {
 
     @RequestMapping(value = "/genre/{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public List<Movie> getMoviesByGenre(@PathVariable int id,
-                                        @RequestParam(value = "rating", required = false, defaultValue = "NONE") SortDirection ratingSortDirection,
-                                        @RequestParam(value = "price", required = false, defaultValue = "NONE") SortDirection priceSortDirection) {
-        MovieRequestParam requestParam = createMovieRequestParam(ratingSortDirection, priceSortDirection);
+                                        @RequestParam(value = "rating", required = false, defaultValue = "NONE") SortDirection ratingSorting,
+                                        @RequestParam(value = "price", required = false, defaultValue = "NONE") SortDirection priceSorting) {
+        MovieRequestParam movieRequestParam = createMovieRequestParam(ratingSorting, priceSorting);
         logger.info("Get movies by genre");
-        List<Movie> movies = movieService.getByGenre(id, requestParam);
+        List<Movie> movies = movieService.getByGenre(id, movieRequestParam);
         logger.debug("Returning {} movie(s) for genreId {}", movies.size(), id);
         return movies;
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public Movie getMoviesById(@PathVariable int id) {
+    public Movie getMoviesById(@PathVariable int id,
+                               @RequestParam(value = "currency", required = false, defaultValue = "UAH") Currency currency) {
+        MovieRequestParam movieRequestParam = new MovieRequestParam();
+        movieRequestParam.setCurrency(currency);
         logger.info("Get movies by id {}", id);
-        Movie movie = movieService.getById(id);
+        Movie movie = movieService.getById(id, movieRequestParam);
         logger.trace("Returning movie {}", movie);
         return movie;
     }
@@ -87,6 +92,7 @@ public class MovieController {
     @InitBinder
     public void initBinder(final WebDataBinder webdataBinder) {
         webdataBinder.registerCustomEditor(SortDirection.class, new SortDirectionConverter());
+        webdataBinder.registerCustomEditor(Currency.class, new CurrencyParamConverter());
     }
 
     @Autowired

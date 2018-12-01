@@ -1,7 +1,7 @@
 package com.study.movieland.dao.jdbc.util;
 
-import com.study.movieland.entity.MovieRequestParam;
-import com.study.movieland.entity.SortDirection;
+import com.study.movieland.data.MovieRequestParam;
+import com.study.movieland.data.SortDirection;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

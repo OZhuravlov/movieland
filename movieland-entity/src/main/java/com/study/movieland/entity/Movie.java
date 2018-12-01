@@ -9,6 +9,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Movie {
 
+    private static final Currency DEFAULT_CURRENCY = Currency.UAH;
+
     int id;
     private String nameNative;
     private String nameRussian;
@@ -18,6 +20,7 @@ public class Movie {
     private String description;
     private Double rating;
     private Double price;
+    private Currency currency;
     private String picturePath;
     private List<Review> reviews;
 
@@ -28,6 +31,7 @@ public class Movie {
         this.yearOfRelease = yearOfRelease;
         this.rating = rating;
         this.price = price;
+        this.currency = DEFAULT_CURRENCY;
         this.picturePath = picturePath;
     }
 

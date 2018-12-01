@@ -1,6 +1,6 @@
 package com.study.movieland.web.converter;
 
-import com.study.movieland.entity.SortDirection;
+import com.study.movieland.data.SortDirection;
 import com.study.movieland.web.exception.BadRequestParamException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

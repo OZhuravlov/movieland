@@ -1,6 +1,6 @@
 package com.study.movieland.dao.jdbc.util;
 
-import com.study.movieland.entity.MovieRequestParam;
+import com.study.movieland.data.MovieRequestParam;
 
 public class QueryUtil {
 

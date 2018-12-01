@@ -1,5 +1,7 @@
 package com.study.movieland.web.controller;
 
+import com.study.movieland.data.MovieRequestParam;
+import com.study.movieland.data.SortDirection;
 import com.study.movieland.entity.*;
 import com.study.movieland.service.MovieService;
 import com.study.movieland.web.exception.BadRequestParamException;
@@ -106,12 +108,14 @@ public class MovieControllerTest {
     public void getMoviesByIdTest() throws Exception {
         int id = 1;
         Movie movie = new Movie(1, "Movie 1", "Фильм 1", 2001, 1.21, 23.41, "path/to/picture/1");
+        MovieRequestParam movieRequestParam = new MovieRequestParam();
+        movieRequestParam.setCurrency(Currency.UAH);
         movie.setDescription("Description 1");
         movie.setCountries(getMockCountries());
         movie.setGenres(getMockGenres());
         movie.setReviews(getMockReviews());
 
-        when(movieService.getById(id)).thenReturn(movie);
+        when(movieService.getById(id, movieRequestParam)).thenReturn(movie);
         mockMvc.perform(get("/movie/" + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
@@ -140,7 +144,7 @@ public class MovieControllerTest {
                 .andExpect(jsonPath("$.reviews[1].user.id", is(movie.getReviews().get(1).getUser().getId())))
                 .andExpect(jsonPath("$.reviews[1].user.nickname", is(movie.getReviews().get(1).getUser().getNickname())))
         ;
-        verify(movieService, times(1)).getById(id);
+        verify(movieService, times(1)).getById(id, movieRequestParam);
         verifyNoMoreInteractions(movieService);
     }
 

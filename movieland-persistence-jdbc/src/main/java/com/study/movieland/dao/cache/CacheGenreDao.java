@@ -25,8 +25,8 @@ public class CacheGenreDao implements GenreDao {
     private volatile Map<Integer, Genre> genres;
 
     @PostConstruct
-    @Scheduled(fixedDelayString = "${scheduler.fixedDelayInMilliseconds}",
-            initialDelayString = "${scheduler.initDelayInMilliseconds}")
+    @Scheduled(fixedDelayString = "${scheduler.dao.cache.genre.fixedDelayInMilliseconds}",
+            initialDelayString = "${scheduler.dao.cache.genre.initDelayInMilliseconds}")
     public void init() {
         logger.info("Refreshing cache");
         List<Genre> genreList = genreDao.getAll();

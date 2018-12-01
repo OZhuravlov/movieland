@@ -1,10 +1,10 @@
 package com.study.movieland.entity;
 
-public enum SortDirection {
-    ASC, DESC;
+public enum Currency {
+    UAH, USD, EUR;
 
-    public static SortDirection getValue(String inputString) {
-        for (SortDirection value : values()) {
+    public static Currency getValue(String inputString) {
+        for (Currency value : values()) {
             if (value.name().equalsIgnoreCase(inputString)) {
                 return value;
             }

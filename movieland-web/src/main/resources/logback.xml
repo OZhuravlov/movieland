@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <property resource="application.yaml"/>
     <property name="LOG_FILE_PATH" value="logs"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -35,7 +34,7 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="com.study.movieland" level="debug"
+    <logger name="com.study.movieland" level="trace"
             additivity="false">
         <appender-ref ref="FILE"/>
         <appender-ref ref="STDOUT"/>

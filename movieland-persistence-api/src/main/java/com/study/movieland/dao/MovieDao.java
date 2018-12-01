@@ -1,7 +1,7 @@
 package com.study.movieland.dao;
 
 import com.study.movieland.entity.Movie;
-import com.study.movieland.entity.MovieRequestParam;
+import com.study.movieland.data.MovieRequestParam;
 
 import java.util.List;
 

@@ -1,13 +1,11 @@
 package com.study.movieland.service.impl;
 
 import com.study.movieland.dao.MovieDao;
+import com.study.movieland.entity.Currency;
 import com.study.movieland.entity.Genre;
 import com.study.movieland.entity.Movie;
-import com.study.movieland.entity.MovieRequestParam;
-import com.study.movieland.service.CountryService;
-import com.study.movieland.service.GenreService;
-import com.study.movieland.service.MovieService;
-import com.study.movieland.service.ReviewService;
+import com.study.movieland.data.MovieRequestParam;
+import com.study.movieland.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,7 @@ public class DefaultMovieService implements MovieService {
     private GenreService genreService;
     private CountryService countryService;
     private ReviewService reviewService;
+    private CurrencyService currencyService;
 
     @Override
     public List<Movie> getAll(MovieRequestParam movieRequestParam) {
@@ -54,12 +53,16 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Override
-    public Movie getById(int id) {
+    public Movie getById(int id, MovieRequestParam movieRequestParam) {
         logger.info("get Movies by id {}", id);
         Movie movie = movieDao.getById(id);
         countryService.enrichMovie(movie);
         genreService.enrichMovie(movie);
         reviewService.enrichMovie(movie);
+        Currency currency = movieRequestParam.getCurrency();
+        double convertedPrice = currencyService.getConvertedPrice(movie.getPrice(), currency);
+        movie.setPrice(convertedPrice);
+        movie.setCurrency(currency);
         return movie;
     }
 
@@ -82,5 +85,10 @@ public class DefaultMovieService implements MovieService {
     @Autowired
     public void setReviewService(ReviewService reviewService) {
         this.reviewService = reviewService;
+    }
+
+    @Autowired
+    public void setCurrencyService(CurrencyService currencyService) {
+        this.currencyService = currencyService;
     }
 }

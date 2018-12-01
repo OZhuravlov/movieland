@@ -5,7 +5,7 @@ import com.study.movieland.dao.jdbc.mapper.MovieByIdRowMapper;
 import com.study.movieland.dao.jdbc.mapper.MovieRowMapper;
 import com.study.movieland.dao.jdbc.util.QueryUtil;
 import com.study.movieland.entity.Movie;
-import com.study.movieland.entity.MovieRequestParam;
+import com.study.movieland.data.MovieRequestParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

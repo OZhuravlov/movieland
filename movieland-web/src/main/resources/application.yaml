@@ -1,8 +1,0 @@
-dao:
-  movie:
-    randomCount: 3
-
-# 4 hours = 4*60*60*1000
-scheduler:
-  initDelayInMilliseconds: 14400000
-  fixedDelayInMilliseconds: 14400000
