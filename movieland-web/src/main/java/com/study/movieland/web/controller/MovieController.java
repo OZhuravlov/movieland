@@ -1,10 +1,12 @@
 package com.study.movieland.web.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.study.movieland.data.MovieRequestParam;
 import com.study.movieland.data.SortDirection;
 import com.study.movieland.entity.Currency;
 import com.study.movieland.entity.Movie;
 import com.study.movieland.service.MovieService;
+import com.study.movieland.view.Views;
 import com.study.movieland.web.converter.CurrencyParamConverter;
 import com.study.movieland.web.converter.SortDirectionConverter;
 import com.study.movieland.web.exception.BadRequestParamException;
@@ -28,6 +30,7 @@ public class MovieController {
 
     private MovieService movieService;
 
+    @JsonView(Views.Summary.class)
     @RequestMapping(method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public List<Movie> getAllMovies(@RequestParam(value = "rating", required = false, defaultValue = "NONE") SortDirection ratingSorting,
                                     @RequestParam(value = "price", required = false, defaultValue = "NONE") SortDirection priceSorting) {
@@ -39,6 +42,7 @@ public class MovieController {
         return movies;
     }
 
+    @JsonView(Views.Summary.class)
     @RequestMapping(value = "/random", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public List<Movie> getRandomMovies() {
         logger.info("Get random movies");
@@ -47,6 +51,7 @@ public class MovieController {
         return movies;
     }
 
+    @JsonView(Views.Summary.class)
     @RequestMapping(value = "/genre/{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public List<Movie> getMoviesByGenre(@PathVariable int id,
                                         @RequestParam(value = "rating", required = false, defaultValue = "NONE") SortDirection ratingSorting,

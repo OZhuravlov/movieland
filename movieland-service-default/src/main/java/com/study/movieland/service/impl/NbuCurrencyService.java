@@ -24,15 +24,19 @@ public class NbuCurrencyService implements CurrencyService {
     private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyyMMdd");
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Currency baseCurrency;
 
     private volatile Map<Currency, Double> rates;
     private RestTemplate restTemplate;
-    private Currency baseCurrency;
     private String url;
 
+    @Autowired
+    public NbuCurrencyService(@Value("${service.currency.base:UAH}") Currency baseCurrency) {
+        this.baseCurrency = baseCurrency;
+    }
+
     @PostConstruct
-    @Scheduled(fixedDelayString = "${scheduler.dao.cache.currency.fixedDelayInMilliseconds}",
-            initialDelayString = "${scheduler.dao.cache.currency.initDelayInMilliseconds}")
+    @Scheduled(cron = "${scheduler.service.currency.cron}")
     public void init() {
         logger.info("Refreshing cache");
         Map<Currency, Double> rateMap = getAllRates();
@@ -42,7 +46,7 @@ public class NbuCurrencyService implements CurrencyService {
 
     @Override
     public Double getConvertedPrice(double price, Currency currency) {
-        if(currency.equals(baseCurrency)){
+        if (currency.equals(baseCurrency)) {
             return price;
         }
         double convertedPrice = price / rates.get(currency);
@@ -58,7 +62,7 @@ public class NbuCurrencyService implements CurrencyService {
         Map<Currency, Double> rateMap = new HashMap<>();
         for (NbuCurrencyRate nbuCurrencyRate : nbuCurrencyRates) {
             String currencyCode = nbuCurrencyRate.getCurrencyCode();
-            if(Currency.isExists(currencyCode)){
+            if (Currency.isExists(currencyCode)) {
                 rateMap.put(Currency.getValue(currencyCode), nbuCurrencyRate.getRate());
             }
         }
@@ -71,12 +75,7 @@ public class NbuCurrencyService implements CurrencyService {
         this.restTemplate = restTemplate;
     }
 
-    @Value("${dao.currency.base:UAH}")
-    public void setBaseCurrency(Currency baseCurrency) {
-        this.baseCurrency = baseCurrency;
-    }
-
-    @Value("${dao.currency.url}")
+    @Value("${service.currency.url}")
     public void setUrl(String url) {
         this.url = url;
     }
