@@ -12,12 +12,13 @@ public class CurrencyParamConverter extends PropertyEditorSupport {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public void setAsText(final String paramValue) {
-        Currency currency = Currency.getValue(paramValue);
-        if (currency == null) {
+        try {
+            Currency currency = Currency.getValue(paramValue);
+            setValue(currency);
+        } catch (IllegalArgumentException e) {
             logger.warn("Invalid currency param {}", paramValue);
             throw new BadRequestParamException("Invalid currency param " + paramValue);
         }
-        setValue(currency);
     }
 
 }

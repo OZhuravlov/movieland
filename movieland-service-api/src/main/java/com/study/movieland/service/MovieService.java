@@ -1,7 +1,7 @@
 package com.study.movieland.service;
 
-import com.study.movieland.entity.Movie;
 import com.study.movieland.data.MovieRequestParam;
+import com.study.movieland.entity.Movie;
 
 import java.util.List;
 

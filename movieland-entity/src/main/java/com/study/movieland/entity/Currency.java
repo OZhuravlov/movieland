@@ -9,6 +9,16 @@ public enum Currency {
                 return value;
             }
         }
-        return null;
+        throw new IllegalArgumentException("No enum constant " + inputString);
     }
+
+    public static Boolean isExists(String inputString) {
+        for (Currency value : values()) {
+            if (value.name().equalsIgnoreCase(inputString)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

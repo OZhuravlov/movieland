@@ -13,7 +13,6 @@
         <module>movieland-entity</module>
         <module>movieland-persistence-api</module>
         <module>movieland-persistence-jdbc</module>
-        <module>movieland-persistence-rest</module>
         <module>movieland-service-api</module>
         <module>movieland-service-default</module>
         <module>movieland-web</module>
@@ -128,7 +127,7 @@
                 <version>${logback.version}</version>
             </dependency>
 
-            <!-- Automation -->
+            <!-- Lombok -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>

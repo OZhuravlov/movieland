@@ -1,5 +1,6 @@
 package com.study.movieland.web.controller;
 
+import com.study.movieland.web.error.JsonError;
 import com.study.movieland.web.exception.BadRequestParamException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,15 +20,15 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = NOT_FOUND_MESSAGE)
     @ExceptionHandler(IllegalArgumentException.class)
     public String handleIllegalArgumentException(Exception e) {
-        logger.warn("Error: {}",e);
-        return "{\"error\": " + e.getMessage() + "}";
+        logger.warn("Error: {}", e);
+        return JsonError.getJsonMessage(e.getMessage());
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = BAD_REQUEST_MESSAGE)
     @ExceptionHandler(BadRequestParamException.class)
     public String handleBadRequestParamException(Exception e) {
-        logger.warn("Error: {}",e);
-        return "{\"error\": " + e.getMessage() + "}";
+        logger.warn("Error: {}", e);
+        return JsonError.getJsonMessage(e.getMessage());
     }
 
 }

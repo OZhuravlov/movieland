@@ -18,11 +18,6 @@
             <artifactId>movieland-persistence-jdbc</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.study</groupId>
-            <artifactId>movieland-persistence-rest</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
 </project>
