@@ -12,16 +12,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class NbuCurrencyService implements CurrencyService {
 
-    private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyyMMdd");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final Currency baseCurrency;
@@ -55,8 +55,9 @@ public class NbuCurrencyService implements CurrencyService {
 
     Map<Currency, Double> getAllRates() {
         logger.info("getting rate for all currencies");
-        String exchangeDate = FORMATTER.format(new Date());
-        NbuCurrencyRate[] nbuCurrencyRates = restTemplate.getForObject(url, NbuCurrencyRate[].class, exchangeDate);
+        LocalDateTime exchangeDate = LocalDateTime.now();
+        String exchangeDateParam = exchangeDate.format(FORMATTER);
+        NbuCurrencyRate[] nbuCurrencyRates = restTemplate.getForObject(url, NbuCurrencyRate[].class, exchangeDateParam);
         logger.trace("got currency rates: {}", Arrays.asList(nbuCurrencyRates));
 
         Map<Currency, Double> rateMap = new HashMap<>();

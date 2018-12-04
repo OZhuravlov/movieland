@@ -27,7 +27,7 @@ public class NbuCurrencyServiceTest {
     private RestTemplate restTemplate;
 
     @InjectMocks
-    private NbuCurrencyService currencyService;
+    private NbuCurrencyService currencyService = new NbuCurrencyService(Currency.UAH);
 
     @Test
     public void initAndGetAllTest() {
@@ -68,7 +68,6 @@ public class NbuCurrencyServiceTest {
 
         double rateEUR = rates.get(Currency.EUR);
         assertEquals(0, Double.compare(nbuCurrencyRates[1].getRate(), rateEUR));
-
     }
 
 }

@@ -11,8 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Movie {
 
-    private static final Currency DEFAULT_CURRENCY = Currency.UAH;
-
     @JsonView(Views.Summary.class)
     int id;
     @JsonView(Views.Summary.class)
@@ -24,12 +22,11 @@ public class Movie {
     @JsonView(Views.Summary.class)
     private Double rating;
     @JsonView(Views.Summary.class)
-    private Double price;
-    @JsonView(Views.Summary.class)
-    private Currency currency;
-    @JsonView(Views.Summary.class)
     private String picturePath;
+    @JsonView(Views.Summary.class)
+    private Double price;
 
+    private Currency currency;
     private String description;
     private List<Country> countries;
     private List<Genre> genres;
@@ -42,7 +39,6 @@ public class Movie {
         this.yearOfRelease = yearOfRelease;
         this.rating = rating;
         this.price = price;
-        this.currency = DEFAULT_CURRENCY;
         this.picturePath = picturePath;
     }
 
