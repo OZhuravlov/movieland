@@ -9,30 +9,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/login")
 public class UserController {
 
+    private static final String LOGOUT_OK_MESSAGE = "{\"logout\" : \"OK\"}";
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private UserService userService;
     private SecurityService securityService;
 
-    @RequestMapping(method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
-    public LoginResponseData getLogin(@RequestBody LoginRequestData loginRequestData) {
-        logger.info("Get login");
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public LoginResponseData doLogin(@RequestBody LoginRequestData loginRequestData) {
+        logger.info("Do login");
         User user = userService.getUserByEmail(loginRequestData.getEmail());
-        UUID uuid = securityService.getLogin(user, loginRequestData.getPassword());
+        UUID uuid = securityService.doLogin(user, loginRequestData.getPassword());
         LoginResponseData loginResponseData = new LoginResponseData(uuid, user.getNickname());
         logger.trace("Returning {} user", user);
         return loginResponseData;
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.DELETE, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    public String doLogout(@RequestHeader(value = "uuid") UUID uuid) {
+        logger.info("Do logout");
+        securityService.doLogout(uuid);
+        return LOGOUT_OK_MESSAGE;
     }
 
     @Autowired

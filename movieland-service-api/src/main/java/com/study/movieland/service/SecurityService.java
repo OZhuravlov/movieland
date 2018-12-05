@@ -6,8 +6,10 @@ import java.util.UUID;
 
 public interface SecurityService {
 
-    UUID getLogin(User user, String password);
+    UUID doLogin(User user, String password);
 
-    void getLogout(UUID uuid);
+    void doLogout(UUID uuid);
+
+    User getUserByToken(UUID uuid);
 
 }

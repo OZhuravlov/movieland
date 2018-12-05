@@ -1,5 +1,6 @@
-package com.study.movieland.web.controller;
+package com.study.movieland.web.controller.handler;
 
+import com.study.movieland.exception.UserAuthenticationException;
 import com.study.movieland.web.error.JsonError;
 import com.study.movieland.web.exception.BadRequestParamException;
 import org.slf4j.Logger;
@@ -30,5 +31,13 @@ public class GlobalControllerExceptionHandler {
         logger.warn("Error: {}", e);
         return JsonError.getJsonMessage(e.getMessage());
     }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = BAD_REQUEST_MESSAGE)
+    @ExceptionHandler(UserAuthenticationException.class)
+    public String handleUserAuthenticationException(Exception e) {
+        logger.warn("Error: {}", e);
+        return JsonError.getJsonMessage(e.getMessage());
+    }
+
 
 }

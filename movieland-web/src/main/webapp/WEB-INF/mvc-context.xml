@@ -10,5 +10,7 @@
 
     <context:component-scan base-package="com.study.movieland.web"/>
     <mvc:annotation-driven/>
-
+    <mvc:interceptors>
+        <bean class="com.study.movieland.web.controller.interceptor.SecurityInterceptor" />
+    </mvc:interceptors>
 </beans>
