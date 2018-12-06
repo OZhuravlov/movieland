@@ -3,7 +3,7 @@ package com.study.movieland.dao.jdbc;
 import com.study.movieland.dao.MovieDao;
 import com.study.movieland.dao.jdbc.mapper.MovieByIdRowMapper;
 import com.study.movieland.dao.jdbc.mapper.MovieRowMapper;
-import com.study.movieland.dao.jdbc.util.QueryUtil;
+import com.study.movieland.dao.jdbc.util.DaoUtils;
 import com.study.movieland.data.MovieRequestParam;
 import com.study.movieland.entity.Movie;
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class JdbcMovieDao implements MovieDao {
     @Override
     public List<Movie> getAll(MovieRequestParam movieRequestParam) {
         logger.info("get All Movies");
-        String sql = QueryUtil.addOptionalRequestParamsToQuery(GET_ALL_SQL, movieRequestParam);
+        String sql = DaoUtils.addOptionalRequestParamsToQuery(GET_ALL_SQL, movieRequestParam);
         logger.debug("get All Movies query {}", sql);
         List<Movie> movies = jdbcTemplate.query(sql, MOVIE_ROW_MAPPER);
         logger.trace("getAll: return List of movies {}", movies);
@@ -60,7 +60,7 @@ public class JdbcMovieDao implements MovieDao {
     @Override
     public List<Movie> getByGenreId(int genreId, MovieRequestParam movieRequestParam) {
         logger.info("get Movies by genreId {}", genreId);
-        String sql = QueryUtil.addOptionalRequestParamsToQuery(GET_BY_GENRE_SQL, movieRequestParam);
+        String sql = DaoUtils.addOptionalRequestParamsToQuery(GET_BY_GENRE_SQL, movieRequestParam);
         logger.debug("get Movies by Genre query {}", sql);
         List<Movie> movies = jdbcTemplate.query(sql, MOVIE_ROW_MAPPER, genreId);
         logger.trace("getAll: return List of movies for genreId {}: {}", genreId, movies);
