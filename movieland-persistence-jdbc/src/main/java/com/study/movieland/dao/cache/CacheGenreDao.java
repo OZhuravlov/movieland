@@ -37,6 +37,7 @@ public class CacheGenreDao implements GenreDao {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Genre> getAll() {
         logger.info("get All Genres from cache");
         List<Genre> values = new ArrayList(genres.values());

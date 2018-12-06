@@ -10,4 +10,7 @@ public class User {
     private int id;
     @JsonView(Views.Summary.class)
     private String nickname;
+
+    private String email;
+    private String password;
 }

@@ -1,5 +1,6 @@
-package com.study.movieland.web.controller;
+package com.study.movieland.web.controller.handler;
 
+import com.study.movieland.exception.UserAuthenticationException;
 import com.study.movieland.web.error.JsonError;
 import com.study.movieland.web.exception.BadRequestParamException;
 import org.slf4j.Logger;
@@ -14,21 +15,30 @@ public class GlobalControllerExceptionHandler {
 
     private final static String NOT_FOUND_MESSAGE = "Requested Data Not Found";
     private final static String BAD_REQUEST_MESSAGE = "Bad Request params";
+    private final static String UNAUTHORIZED_MESSAGE = "User unauthorized";
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = NOT_FOUND_MESSAGE)
     @ExceptionHandler(IllegalArgumentException.class)
     public String handleIllegalArgumentException(Exception e) {
-        logger.warn("Error: {}", e);
+        logger.warn("Error", e);
         return JsonError.getJsonMessage(e.getMessage());
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = BAD_REQUEST_MESSAGE)
     @ExceptionHandler(BadRequestParamException.class)
     public String handleBadRequestParamException(Exception e) {
-        logger.warn("Error: {}", e);
+        logger.warn("Error", e);
         return JsonError.getJsonMessage(e.getMessage());
     }
+
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = UNAUTHORIZED_MESSAGE)
+    @ExceptionHandler(UserAuthenticationException.class)
+    public String handleUserAuthenticationException(Exception e) {
+        logger.warn("Error", e);
+        return JsonError.getJsonMessage(e.getMessage());
+    }
+
 
 }
