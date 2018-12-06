@@ -13,7 +13,7 @@ public class QueryUtilTest {
     public void addOptionalRequestParamsToQueryTest() {
         // no params - no changes
         String sql = "SELECT";
-        String actualSql = QueryUtil.addOptionalRequestParamsToQuery(sql, null);
+        String actualSql = DaoUtils.addOptionalRequestParamsToQuery(sql, null);
         assertEquals(sql, actualSql);
     }
 
@@ -28,7 +28,7 @@ public class QueryUtilTest {
         params.setSortFieldName("rating");
         params.setSortDirection(SortDirection.ASC);
         expectedSql = "SELECT ORDER BY rating ASC";
-        actualSql = QueryUtil.setOrderBy(sql, params);
+        actualSql = DaoUtils.setOrderBy(sql, params);
         assertTrue(expectedSql.equalsIgnoreCase(actualSql));
 
         // price sorting
@@ -36,12 +36,12 @@ public class QueryUtilTest {
         params2.setSortFieldName("price");
         params2.setSortDirection(SortDirection.DESC);
         expectedSql = "SELECT ORDER BY price DESC";
-        actualSql = QueryUtil.setOrderBy(sql, params2);
+        actualSql = DaoUtils.setOrderBy(sql, params2);
         assertTrue(expectedSql.equalsIgnoreCase(actualSql));
 
         // no sorting - no changes
         MovieRequestParam params3 = new MovieRequestParam();
-        actualSql = QueryUtil.setOrderBy(sql, params3);
+        actualSql = DaoUtils.setOrderBy(sql, params3);
         assertEquals(sql, actualSql);
     }
 }

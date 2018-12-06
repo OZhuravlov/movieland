@@ -2,8 +2,10 @@ package com.study.movieland.service;
 
 import com.study.movieland.entity.User;
 
+import java.util.Optional;
+
 public interface UserService {
 
-    User getUserByEmail(String email);
+    Optional<User> getUser(String email, String password);
 
 }
