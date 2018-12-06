@@ -11,8 +11,7 @@ CREATE TABLE users
 , username   VARCHAR(100)  NOT NULL
 , password   VARCHAR(250)  NOT NULL
 , sole       VARCHAR(100)  NOT NULL
-, name       VARCHAR(100)  NOT NULL
-, surname    VARCHAR(100)
+, nickname   VARCHAR(200)  NOT NULL
 , email      VARCHAR(100)  NOT NULL
 , role       VARCHAR(20)   NOT NULL
 );

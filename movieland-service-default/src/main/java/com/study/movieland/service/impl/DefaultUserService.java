@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class DefaultUserService implements UserService {
 
@@ -16,13 +18,12 @@ public class DefaultUserService implements UserService {
     private UserDao userDao;
 
     @Override
-    public User getUserByEmail(String email) {
+    public Optional<User> getUser(String email, String password   ) {
         logger.debug("Get user by email");
-        User user = userDao.getByEmail(email);
-        logger.trace("Return user", user);
-        return user;
+        Optional<User> userOptional = userDao.getUser(email, password);
+        logger.trace("Return user", userOptional);
+        return userOptional;
     }
-
 
     @Autowired
     public void setUserDao(UserDao userDao) {

@@ -38,11 +38,13 @@ public class DefaultSecurityService implements SecurityService {
 
     @Override
     public Session doLogin(final String email, String password) {
-        User user = userService.getUserByEmail(email);
-        Optional.ofNullable(user)
-                .filter(u -> u.getPassword().equals(password))
-                .orElseThrow(() -> new UserAuthenticationException("Login failed. User/Password is not valid"));
+        Optional<User> userOptional = userService.getUser(email, password);
+        if (!userOptional.isPresent()) {
+            throw new UserAuthenticationException("Login failed. User/Password is not valid");
+        }
+        User user = userOptional.get();
         user.setPassword(null);
+        user.setSole(null);
         logger.info("doLogin email {}", user.getEmail());
         sessions.entrySet().removeIf(e -> e.getValue().getUser().getEmail().equals(user.getEmail()));
         Session session = new Session(user,
