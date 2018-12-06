@@ -2,6 +2,7 @@ package com.study.movieland.service;
 
 import com.study.movieland.entity.User;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface SecurityService {
@@ -10,6 +11,6 @@ public interface SecurityService {
 
     void doLogout(UUID uuid);
 
-    User getUserByToken(UUID uuid);
+    Optional<User> getUserByToken(UUID uuid);
 
 }

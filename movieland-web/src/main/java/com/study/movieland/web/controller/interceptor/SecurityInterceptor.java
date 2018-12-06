@@ -10,6 +10,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -22,12 +23,16 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response, Object handler) throws Exception {
-        UUID uuid = UUID.fromString(request.getHeader("uuid"));
-        User user = securityService.getUserByToken(uuid);
-        if(user != null) {
-            logger.info("Recognise user {}", user.getNickname());
-            request.getSession().setAttribute("user", user);
+                             HttpServletResponse response, Object handler) {
+        String uuidParam = request.getHeader("uuid");
+        if (uuidParam != null) {
+            UUID uuid = UUID.fromString(request.getHeader("uuid"));
+            Optional<User> optionalUser = securityService.getUserByToken(uuid);
+            if (optionalUser.isPresent()) {
+                User user = optionalUser.get();
+                logger.info("Recognise user {}", user.getNickname());
+                request.getSession().setAttribute("user", user);
+            }
         }
         return true;
     }

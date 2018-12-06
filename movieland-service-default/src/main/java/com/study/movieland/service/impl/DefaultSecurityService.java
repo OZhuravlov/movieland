@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -40,23 +41,18 @@ public class DefaultSecurityService implements SecurityService {
     }
 
     @Override
-    public UUID doLogin(User user, String password) {
+    public UUID doLogin(final User user, String password) {
+        Optional.ofNullable(user)
+                .filter(u -> u.getPassword().equals(password))
+                .orElseThrow(() -> new UserAuthenticationException("Login failed. User/Password is not valid"));
+        user.setPassword(null);
         logger.debug("User {} doLogin", user.getEmail());
-        if (user == null || !user.getPassword().equals(password)) {
-            String errorMessage = "Login failed. User/Password is not valid";
-            logger.warn(errorMessage);
-            throw new UserAuthenticationException(errorMessage);
-        }
-        for (Session session : sessions.values()) {
-            if (user.getEmail().equals(session.getUser().getEmail())) {
-                logger.debug("Found user session. Renew");
-                setToken(session);
-                return session.getToken();
-            }
-        }
+        sessions.entrySet().stream()
+                .filter(e -> e.getValue().getUser().getEmail().equals(user.getEmail()))
+                .forEach(t -> sessions.remove(t.getKey()));
         Session session = new Session(user);
-        setToken(session);
-        UUID token = session.getToken();
+        session.setExpireDate(LocalDateTime.now().plusMinutes(maxSessionDurationInMinutes));
+        UUID token = UUID.randomUUID();
         sessions.put(token, session);
         logger.trace("Return token {}", token);
         return token;
@@ -69,21 +65,15 @@ public class DefaultSecurityService implements SecurityService {
     }
 
     @Override
-    public User getUserByToken(UUID uuid) {
+    public Optional<User> getUserByToken(UUID uuid) {
         if (!sessions.containsKey(uuid)) {
-            return null;
+            return Optional.empty();
         }
         if (sessions.get(uuid).getExpireDate().isBefore(LocalDateTime.now())) {
             sessions.remove(uuid);
-            return null;
+            return Optional.empty();
         }
-        return sessions.get(uuid).getUser();
-    }
-
-    private void setToken(Session session) {
-        logger.debug("User {} set token", session.getUser().getEmail());
-        session.setToken(UUID.randomUUID());
-        session.setExpireDate(LocalDateTime.now().plusMinutes(maxSessionDurationInMinutes));
+        return Optional.of(sessions.get(uuid).getUser());
     }
 
 }

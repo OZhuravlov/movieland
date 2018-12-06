@@ -6,16 +6,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Session {
-    private UUID token;
     private User user;
     private LocalDateTime expireDate;
 
     public Session(User user) {
         this.user = user;
-    }
-
-    public UUID getToken() {
-        return token;
     }
 
     public User getUser() {
@@ -24,10 +19,6 @@ public class Session {
 
     public LocalDateTime getExpireDate() {
         return expireDate;
-    }
-
-    public void setToken(UUID token) {
-        this.token = token;
     }
 
     public void setExpireDate(LocalDateTime expireDate) {
