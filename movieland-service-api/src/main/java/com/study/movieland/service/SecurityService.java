@@ -1,16 +1,16 @@
 package com.study.movieland.service;
 
+import com.study.movieland.data.Session;
 import com.study.movieland.entity.User;
 
 import java.util.Optional;
-import java.util.UUID;
 
 public interface SecurityService {
 
-    UUID doLogin(User user, String password);
+    Session doLogin(String email, String password);
 
-    void doLogout(UUID uuid);
+    void doLogout(String token);
 
-    Optional<User> getUserByToken(UUID uuid);
+    Optional<User> getUserByToken(String token);
 
 }

@@ -8,9 +8,12 @@ import java.util.UUID;
 public class Session {
     private User user;
     private LocalDateTime expireDate;
+    private String token;
 
-    public Session(User user) {
+    public Session(User user, LocalDateTime expireDate, String token) {
         this.user = user;
+        this.expireDate = expireDate;
+        this.token = token;
     }
 
     public User getUser() {
@@ -21,7 +24,16 @@ public class Session {
         return expireDate;
     }
 
-    public void setExpireDate(LocalDateTime expireDate) {
-        this.expireDate = expireDate;
+    public String getToken() {
+        return token;
+    }
+
+    @Override
+    public String toString() {
+        return "Session{" +
+                "user=" + user +
+                ", expireDate=" + expireDate +
+                ", token='" + token + '\'' +
+                '}';
     }
 }
