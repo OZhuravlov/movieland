@@ -9,7 +9,7 @@
         </filter>
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>
-                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %X{requestId} %X{username} %-5level %logger{36} - %msg%n
             </Pattern>
         </layout>
     </appender>
@@ -19,7 +19,7 @@
         <file>${LOG_FILE_PATH}/movieland.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>
-                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %X{requestId} %X{username} %-5level %logger{36} - %msg%n
             </Pattern>
         </encoder>
 
