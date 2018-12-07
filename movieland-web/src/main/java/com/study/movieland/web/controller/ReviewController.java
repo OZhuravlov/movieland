@@ -1,6 +1,7 @@
 package com.study.movieland.web.controller;
 
 import com.study.movieland.entity.Review;
+import com.study.movieland.entity.Role;
 import com.study.movieland.service.ReviewService;
 import com.study.movieland.web.data.ReviewRequestData;
 import com.study.movieland.web.holder.UserHolder;
@@ -22,6 +23,7 @@ public class ReviewController {
     private ReviewService reviewService;
 
     @RequestMapping(method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+//    @ProtectedBy(allowedRoles = {Role.ADMIN, Role.USER})
     public void addReview(@RequestBody ReviewRequestData reviewRequestData) {
         logger.info("Add new review");
         Review review = new Review();

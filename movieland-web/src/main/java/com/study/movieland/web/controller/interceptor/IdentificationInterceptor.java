@@ -42,7 +42,6 @@ public class IdentificationInterceptor extends HandlerInterceptorAdapter {
                 .orElse(DEFAULT_USERNAME);
         MDC.put(USERNAME_PARAM_NAME, username);
         logger.debug("Recognize request");
-
         return true;
     }
 
