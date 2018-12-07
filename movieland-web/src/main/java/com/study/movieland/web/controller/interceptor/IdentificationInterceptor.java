@@ -1,5 +1,6 @@
 package com.study.movieland.web.controller.interceptor;
 
+import com.study.movieland.data.Session;
 import com.study.movieland.entity.User;
 import com.study.movieland.service.SecurityService;
 import org.slf4j.Logger;
@@ -27,10 +28,11 @@ public class IdentificationInterceptor extends HandlerInterceptorAdapter {
                              HttpServletResponse response, Object handler) {
         String token = request.getHeader("uuid");
         MDC.put("requestId", UUID.randomUUID().toString());
-        Optional<User> optionalUser = securityService.getUserByToken(token);
-        String username = (optionalUser.isPresent()) ? optionalUser.get().getEmail() : "guest";
+        Optional<Session> optionalSession = securityService.getSession(token);
+        String username = (optionalSession.isPresent()) ? optionalSession.get().getUser().getEmail() : "guest";
         MDC.put("username", username);
         logger.debug("Recognize request");
+
         return true;
     }
 }

@@ -62,13 +62,11 @@ public class DefaultSecurityService implements SecurityService {
     }
 
     @Override
-    public Optional<User> getUserByToken(String token) {
-        if (token == null
-                || !sessions.containsKey(token)
-                || sessions.get(token).getExpireDate().isBefore(LocalDateTime.now())) {
-            return Optional.empty();
-        }
-        return Optional.of(sessions.get(token).getUser());
+    public Optional<Session> getSession(String token) {
+        return Optional.ofNullable(token)
+                .filter(t -> sessions.containsKey(t))
+                .filter(t -> sessions.get(t).getExpireDate().isAfter(LocalDateTime.now()))
+                .map(t -> sessions.get(t));
     }
 
     @Autowired
