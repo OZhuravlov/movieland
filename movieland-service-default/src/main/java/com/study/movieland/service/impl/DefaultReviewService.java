@@ -26,6 +26,12 @@ public class DefaultReviewService implements ReviewService {
         logger.trace("Enrich Movie id {} with reviews: {}", movie.getId(), reviews);
     }
 
+    @Override
+    public void add(int movieId, int userId, String text) {
+        reviewDao.add(movieId, userId, text);
+        logger.debug("Add new review for Movie id {} from userId {}: {}", movieId, userId, text);
+    }
+
     @Autowired
     public void setReviewDao(ReviewDao reviewDao) {
         this.reviewDao = reviewDao;

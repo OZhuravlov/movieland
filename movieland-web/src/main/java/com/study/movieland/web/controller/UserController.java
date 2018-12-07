@@ -17,7 +17,10 @@ public class UserController {
 
     private SecurityService securityService;
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    @RequestMapping(value = "/login",
+            method = RequestMethod.POST,
+            consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE},
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public LoginResponseData doLogin(@RequestBody LoginRequestData loginRequestData) {
         Session session = securityService.doLogin(loginRequestData.getEmail(), loginRequestData.getPassword());
         LoginResponseData loginResponseData = new LoginResponseData(session.getToken(), session.getUser().getNickname());

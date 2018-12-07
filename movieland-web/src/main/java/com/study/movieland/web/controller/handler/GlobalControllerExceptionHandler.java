@@ -3,6 +3,7 @@ package com.study.movieland.web.controller.handler;
 import com.study.movieland.exception.UserAuthenticationException;
 import com.study.movieland.web.error.JsonError;
 import com.study.movieland.web.exception.BadRequestParamException;
+import com.study.movieland.web.exception.OperationNotAllowedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ public class GlobalControllerExceptionHandler {
     private final static String NOT_FOUND_MESSAGE = "Requested Data Not Found";
     private final static String BAD_REQUEST_MESSAGE = "Bad Request params";
     private final static String UNAUTHORIZED_MESSAGE = "User unauthorized";
+    private final static String METHOD_NOT_ALLOWED_MESSAGE = "No permissions to perform such operation";
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -41,4 +43,9 @@ public class GlobalControllerExceptionHandler {
     }
 
 
+    @ResponseStatus(value = HttpStatus.METHOD_NOT_ALLOWED, reason = METHOD_NOT_ALLOWED_MESSAGE)
+    @ExceptionHandler(OperationNotAllowedException.class)
+    public void handleOperationNotAllowedException(Exception e) {
+        logger.warn("Error", e);
+    }
 }

@@ -16,7 +16,7 @@ import java.util.Optional;
 @Repository
 public class JdbcUserDao implements UserDao {
 
-    private static final String GET_BY_EMAIL_SQL = "SELECT id, nickname, email, password, sole FROM users WHERE email = ?";
+    private static final String GET_BY_EMAIL_SQL = "SELECT id, nickname, email, password, sole, role FROM users WHERE email = ?";
     private static final UserRowMapper USER_ROW_MAPPER = new UserRowMapper();
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
