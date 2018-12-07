@@ -19,4 +19,12 @@ public class ReviewRequestData {
     public void setText(String text) {
         this.text = text;
     }
+
+    @Override
+    public String toString() {
+        return "ReviewRequestData{" +
+                "movieId=" + movieId +
+                ", text='" + text + '\'' +
+                '}';
+    }
 }

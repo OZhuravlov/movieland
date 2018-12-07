@@ -12,5 +12,9 @@
     <mvc:annotation-driven/>
     <mvc:interceptors>
         <bean class="com.study.movieland.web.controller.interceptor.IdentificationInterceptor" />
+        <mvc:interceptor>
+            <mvc:mapping path="/v1/review"/>
+            <bean class="com.study.movieland.web.controller.interceptor.ReviewInterceptor" />
+        </mvc:interceptor>
     </mvc:interceptors>
 </beans>
