@@ -20,12 +20,19 @@ public class DefaultCountryService implements CountryService {
 
     @Override
     public void enrichMovie(Movie movie) {
-        logger.debug("Enrich Movie with countries");
+        logger.info("Enrich Movie with countries");
         List<Country> countries = countryDao.getByMovieId(movie.getId());
         movie.setCountries(countries);
         logger.trace("Enrich Movie id {} with countries: {}", movie.getId(), countries);
     }
 
+    @Override
+    public List<Country> getAll() {
+        logger.info("Get all countries");
+        List<Country> countries = countryDao.getAll();
+        logger.trace("Get all countries: {}", countries);
+        return countries;
+    }
 
     @Autowired
     public void setCountryDao(CountryDao countryDao) {
