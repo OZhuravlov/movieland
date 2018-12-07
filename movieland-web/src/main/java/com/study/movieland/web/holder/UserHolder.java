@@ -13,4 +13,7 @@ public class UserHolder {
         threadLocalScope.set(user);
     }
 
+    public static void clear() {
+        threadLocalScope.remove();
+    }
 }

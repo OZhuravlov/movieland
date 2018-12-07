@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class IdentificationInterceptor extends HandlerInterceptorAdapter {
+public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
     private static final String REQUEST_ID_PARAM_NAME = "requestId";
     private static final String USERNAME_PARAM_NAME = "username";
@@ -49,5 +49,6 @@ public class IdentificationInterceptor extends HandlerInterceptorAdapter {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         MDC.remove(REQUEST_ID_PARAM_NAME);
         MDC.remove(USERNAME_PARAM_NAME);
+        UserHolder.clear();
     }
 }
