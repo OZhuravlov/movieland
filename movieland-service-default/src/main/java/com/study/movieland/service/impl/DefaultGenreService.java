@@ -43,6 +43,16 @@ public class DefaultGenreService implements GenreService {
         movie.setGenres(genres);
     }
 
+    @Override
+    public void addReference(Movie movie) {
+        genreDao.addReference(movie);
+    }
+
+    @Override
+    public void editReference(Movie movie) {
+        genreDao.editReference(movie);
+    }
+
     @Autowired
     @Qualifier("cacheGenreDao")
     public void setGenreDao(GenreDao genreDao) {

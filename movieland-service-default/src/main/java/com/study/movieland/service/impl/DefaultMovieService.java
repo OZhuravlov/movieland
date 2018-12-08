@@ -71,6 +71,8 @@ public class DefaultMovieService implements MovieService {
         logger.info("add new movie {}", movie.getNameNative());
         logger.debug("movie values {}", movie);
         movieDao.add(movie);
+        countryService.addReference(movie);
+        genreService.addReference(movie);
     }
 
     @Override
@@ -78,8 +80,10 @@ public class DefaultMovieService implements MovieService {
         logger.info("edit movie id {}", movie.getId());
         logger.debug("movie values: {}", movie);
         movieDao.edit(movie);
-    }
+        countryService.editReference(movie);
+        genreService.editReference(movie);
 
+    }
 
     @Autowired
     public void setMovieDao(MovieDao movieDao) {

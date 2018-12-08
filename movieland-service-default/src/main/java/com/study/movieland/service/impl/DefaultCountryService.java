@@ -34,6 +34,16 @@ public class DefaultCountryService implements CountryService {
         return countries;
     }
 
+    @Override
+    public void addReference(Movie movie) {
+        countryDao.addReference(movie);
+    }
+
+    @Override
+    public void editReference(Movie movie) {
+        countryDao.editReference(movie);
+    }
+
     @Autowired
     public void setCountryDao(CountryDao countryDao) {
         this.countryDao = countryDao;

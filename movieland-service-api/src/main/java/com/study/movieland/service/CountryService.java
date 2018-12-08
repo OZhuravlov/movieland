@@ -10,4 +10,8 @@ public interface CountryService {
     void enrichMovie(Movie movie);
 
     List<Country> getAll();
+
+    void addReference(Movie movie);
+
+    void editReference(Movie movie);
 }

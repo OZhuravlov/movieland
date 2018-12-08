@@ -13,4 +13,7 @@ public interface GenreService {
 
     void enrichMovie(Movie movie);
 
+    void addReference(Movie movie);
+
+    void editReference(Movie movie);
 }
