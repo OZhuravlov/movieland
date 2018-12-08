@@ -23,7 +23,7 @@ public class JdbcGenreDao implements GenreDao {
     private static final String GET_BY_MOVIE_ID_SQL = "SELECT g.id, g.name " +
             "  FROM genres g JOIN movie_genres mg ON mg.movie_id = g.id " +
             " WHERE mg.movie_id = ?";
-    private static final String REMOVE_MOVIE_GENRES_SQL = "DELETE FROM movie_genres WHERE movie_id = :movieId";
+    private static final String REMOVE_MOVIE_GENRES_SQL = "DELETE FROM movie_genres WHERE movie_id = ?";
     private static final String ADD_MOVIE_GENRES_SQL = "INSERT INTO movie_genres (movie_id, genre_id) " +
             " VALUES(:movieId, :genreId)";
     private static final GenreRowMapper GENRE_ROW_MAPPER = new GenreRowMapper();

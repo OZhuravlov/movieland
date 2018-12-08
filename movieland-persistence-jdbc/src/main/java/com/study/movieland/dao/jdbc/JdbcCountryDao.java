@@ -23,7 +23,7 @@ public class JdbcCountryDao implements CountryDao {
             "  FROM countries c JOIN movie_countries mc ON mc.movie_id = c.id " +
             " WHERE mc.movie_id = ?";
     private static final String GET_ALL_SQL = "SELECT id, name FROM countries";
-    private static final String REMOVE_MOVIE_COUNTRIES_SQL = "DELETE FROM movie_countries WHERE movie_id = :movieId";
+    private static final String REMOVE_MOVIE_COUNTRIES_SQL = "DELETE FROM movie_countries WHERE movie_id = ?";
     private static final String ADD_MOVIE_COUNTRIES_SQL = "INSERT INTO movie_countries (movie_id, country_id) " +
             " VALUES(:movieId, :countryId)";
 
