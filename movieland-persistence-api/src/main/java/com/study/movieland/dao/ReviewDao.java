@@ -7,5 +7,5 @@ import java.util.List;
 public interface ReviewDao {
     List<Review> getByMovieId(int id);
 
-    void add(int movieId, int userId, String text);
+    void add(int movieId, Review review);
 }

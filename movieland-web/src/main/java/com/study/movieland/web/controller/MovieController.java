@@ -5,10 +5,14 @@ import com.study.movieland.data.MovieRequestParam;
 import com.study.movieland.data.SortDirection;
 import com.study.movieland.entity.Currency;
 import com.study.movieland.entity.Movie;
+import com.study.movieland.entity.Role;
 import com.study.movieland.service.MovieService;
 import com.study.movieland.view.Views;
+import com.study.movieland.web.annotation.ProtectedBy;
 import com.study.movieland.web.converter.CurrencyParamConverter;
 import com.study.movieland.web.converter.SortDirectionConverter;
+import com.study.movieland.web.data.MovieAddRequestData;
+import com.study.movieland.web.data.MovieEditRequestData;
 import com.study.movieland.web.exception.BadRequestParamException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,6 +76,40 @@ public class MovieController {
         Movie movie = movieService.getById(id, movieRequestParam);
         logger.trace("Returning movie {}", movie);
         return movie;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    @ProtectedBy(allowedRoles = Role.ADMIN)
+    public void addMovie(@RequestBody MovieAddRequestData movieAddRequestData) {
+        logger.info("add new movie");
+        Movie movie = new Movie();
+        movie.setNameNative(movieAddRequestData.getNameNative());
+        movie.setNameRussian(movieAddRequestData.getNameRussian());
+        movie.setYearOfRelease(movieAddRequestData.getYearOfRelease());
+        movie.setDescription(movieAddRequestData.getDescription());
+        movie.setPrice(movieAddRequestData.getPrice());
+        movie.setPicturePath(movieAddRequestData.getPicturePath());
+        movie.setCountries(movieAddRequestData.getCountries());
+        movie.setGenres(movieAddRequestData.getGenres());
+        logger.debug("add new movie {}", movie);
+        movieService.add(movie);
+    }
+
+    @JsonView(Views.Summary.class)
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
+    @ProtectedBy(allowedRoles = Role.ADMIN)
+    public void editMovie(@RequestBody MovieEditRequestData movieEditRequestData,
+                          @PathVariable int id) {
+        logger.info("edit movie id {}", id);
+        Movie movie = new Movie();
+        movie.setId(id);
+        movie.setNameNative(movieEditRequestData.getNameNative());
+        movie.setNameRussian(movieEditRequestData.getNameRussian());
+        movie.setPicturePath(movieEditRequestData.getPicturePath());
+        movie.setCountries(movieEditRequestData.getCountries());
+        movie.setGenres(movieEditRequestData.getGenres());
+        logger.debug("edit movie {}", movie);
+        movieService.edit(movie);
     }
 
     MovieRequestParam createMovieRequestParam(SortDirection ratingSort, SortDirection priceSort) {

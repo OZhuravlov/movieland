@@ -11,6 +11,14 @@
     <context:component-scan base-package="com.study.movieland.web"/>
     <mvc:annotation-driven/>
     <mvc:interceptors>
-        <bean class="com.study.movieland.web.controller.interceptor.IdentificationInterceptor" />
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.study.movieland.web.controller.interceptor.SecurityInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/review/**"/>
+            <mvc:mapping path="/movie/**"/>
+            <bean class="com.study.movieland.web.controller.interceptor.PermissionCheckInterceptor"/>
+        </mvc:interceptor>
     </mvc:interceptors>
 </beans>

@@ -27,9 +27,9 @@ public class DefaultReviewService implements ReviewService {
     }
 
     @Override
-    public void add(int movieId, int userId, String text) {
-        reviewDao.add(movieId, userId, text);
-        logger.debug("Add new review for Movie id {} from userId {}: {}", movieId, userId, text);
+    public void add(int movieId, Review review) {
+        reviewDao.add(movieId, review);
+        logger.debug("Add new review for Movie id {}: {}", movieId, review);
     }
 
     @Autowired

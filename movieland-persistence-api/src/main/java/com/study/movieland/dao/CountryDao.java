@@ -9,4 +9,6 @@ public interface CountryDao {
     Country getById(int id);
 
     List<Country> getByMovieId(int movieId);
+
+    List<Country> getAll();
 }
