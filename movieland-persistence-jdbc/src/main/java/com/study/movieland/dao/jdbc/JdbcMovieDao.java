@@ -10,11 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class JdbcMovieDao implements MovieDao {
@@ -32,11 +34,24 @@ public class JdbcMovieDao implements MovieDao {
             "SELECT id, name_native, name_russian, year_of_release, description, rating, price, picture_path" +
                     "  FROM movies" +
                     " WHERE id = ?";
+
+    private static final String ADD_SQL = "WITH m AS (INSERT INTO movies (name_russian, name_native, year_of_release, description, price, picture_path)" +
+            " VALUES(:nameRussian, :nameNative, :yearOfRelease, :description, :price, :picturePath) RETURNING id), " +
+            " mc AS (INSERT INTO movie_countries (movie_id, country_id) SELECT m.id, UNNEST(:countryIds) from m) "+
+            " INSERT INTO movie_genres (movie_id, genre_id) SELECT m.id, UNNEST(:genreIds) from m";
+
+    private static final String EDIT_SQL = "WITH m AS (UPDATE movies SET name_russian = :nameRussian, name_native = :nameNative, picture_path = :picturePath WHERE id = :movie_id), " +
+            " mcd AS (DELETE FROM movie_countries WHERE movie_id = :movie_id)," +
+            " mci AS (INSERT INTO movie_countries (movie_id, country_id) SELECT :movie_id, UNNEST(:countryIds)), " +
+            " mgd AS (DELETE FROM movie_genres WHERE movie_id = :movie_id) " +
+            " INSERT INTO movie_genres (movie_id, genre_id) SELECT :movie_id, UNNEST(:genreIds)";
+
     private static final MovieRowMapper MOVIE_ROW_MAPPER = new MovieRowMapper();
     private static final MovieByIdRowMapper MOVIE_BY_ID_ROW_MAPPER = new MovieByIdRowMapper();
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private JdbcTemplate jdbcTemplate;
 
+    private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private int randomCount;
 
     @Override
@@ -69,21 +84,54 @@ public class JdbcMovieDao implements MovieDao {
 
     @Override
     public Movie getById(int id) {
-        try {
-            logger.info("get Movies by Id {}", id);
-            Movie movie = jdbcTemplate.queryForObject(GET_BY_ID_SQL, MOVIE_BY_ID_ROW_MAPPER, id);
-            logger.trace("getAll: return List of movies for genreId {}: {}", id, movie);
-            return movie;
-        } catch (IncorrectResultSizeDataAccessException e) {
-            String warnMessage = "Not such movie with id " + id;
-            logger.warn(warnMessage);
-            throw new IllegalArgumentException(warnMessage, e);
-        }
+        logger.info("get Movies by Id {}", id);
+        Movie movie = jdbcTemplate.queryForObject(GET_BY_ID_SQL, MOVIE_BY_ID_ROW_MAPPER, id);
+        logger.trace("getAll: return List of movies for genreId {}: {}", id, movie);
+        return movie;
+    }
+
+    @Override
+    public void add(Movie movie) {
+        logger.info("add new movie: {}", movie);
+        int[] countryIds = movie.getCountries().stream().mapToInt(c -> c.getId()).toArray();
+        int[] genreIds = movie.getGenres().stream().mapToInt(c -> c.getId()).toArray();
+        Map queryParams = new MapSqlParameterSource()
+                .addValue("nameRussian", movie.getNameRussian())
+                .addValue("nameNative", movie.getNameNative())
+                .addValue("yearOfRelease", movie.getYearOfRelease())
+                .addValue("description", movie.getDescription())
+                .addValue("price", movie.getPrice())
+                .addValue("picturePath", movie.getPicturePath())
+                .addValue("countryIds", countryIds)
+                .addValue("genreIds", genreIds)
+                .getValues();
+        namedParameterJdbcTemplate.update(ADD_SQL, queryParams);
+    }
+
+    @Override
+    public void edit(Movie movie) {
+        logger.info("add new movie: {}", movie);
+        int[] countryIds = movie.getCountries().stream().mapToInt(c -> c.getId()).toArray();
+        int[] genreIds = movie.getGenres().stream().mapToInt(c -> c.getId()).toArray();
+        Map queryParams = new MapSqlParameterSource()
+                .addValue("movie_id", movie.getId())
+                .addValue("nameRussian", movie.getNameRussian())
+                .addValue("nameNative", movie.getNameNative())
+                .addValue("picturePath", movie.getPicturePath())
+                .addValue("countryIds", countryIds)
+                .addValue("genreIds", genreIds)
+                .getValues();
+        namedParameterJdbcTemplate.update(EDIT_SQL, queryParams);
     }
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @Autowired
+    public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Value("${dao.movie.randomCount:3}")

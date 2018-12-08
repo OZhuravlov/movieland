@@ -1,6 +1,5 @@
 package com.study.movieland.web.controller.interceptor;
 
-import com.study.movieland.entity.Role;
 import com.study.movieland.entity.User;
 import com.study.movieland.exception.UserAuthenticationException;
 import com.study.movieland.web.annotation.ProtectedBy;
@@ -16,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 
 @Service
-public class ReviewInterceptor extends HandlerInterceptorAdapter {
+public class PermissionCheckInterceptor extends HandlerInterceptorAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -24,14 +23,14 @@ public class ReviewInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) {
         User user = UserHolder.getCurrentUser();
-        if (user != null) {
-            Role userRole = user.getRole();
-            HandlerMethod method = (HandlerMethod) handler;
-            ProtectedBy protectedBy = method.getMethodAnnotation(ProtectedBy.class);
-            Role[] roles = protectedBy.allowedRoles();
-            if (Arrays.stream(roles).anyMatch(r -> r == userRole)) {
-                return true;
-            }
+        HandlerMethod method = (HandlerMethod) handler;
+        ProtectedBy protectedBy = method.getMethodAnnotation(ProtectedBy.class);
+        if (protectedBy == null) {
+            return true;
+        }
+        if (user != null
+                && Arrays.stream(protectedBy.allowedRoles()).anyMatch(r -> r == user.getRole())) {
+            return true;
         }
         String errorMessage = "Not allowed to perform such operation";
         logger.warn(errorMessage);

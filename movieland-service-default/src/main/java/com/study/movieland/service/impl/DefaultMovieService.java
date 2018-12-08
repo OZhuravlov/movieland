@@ -66,6 +66,20 @@ public class DefaultMovieService implements MovieService {
         return movie;
     }
 
+    @Override
+    public void add(Movie movie) {
+        logger.info("add new movie {}", movie.getNameNative());
+        logger.debug("movie values {}", movie);
+        movieDao.add(movie);
+    }
+
+    @Override
+    public void edit(Movie movie) {
+        logger.info("edit movie id {}", movie.getId());
+        logger.debug("movie values: {}", movie);
+        movieDao.edit(movie);
+    }
+
 
     @Autowired
     public void setMovieDao(MovieDao movieDao) {
