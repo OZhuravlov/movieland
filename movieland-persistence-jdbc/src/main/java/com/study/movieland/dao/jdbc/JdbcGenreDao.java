@@ -19,7 +19,7 @@ public class JdbcGenreDao implements GenreDao {
     private static final String GET_ALL_SQL = "SELECT id, name FROM genres";
     private static final String GET_BY_ID_SQL = "SELECT id, name FROM genres WHERE id = ?";
     private static final String GET_BY_MOVIE_ID_SQL = "SELECT g.id, g.name " +
-            "  FROM genres g JOIN movie_genres mg ON mg.movie_id = g.id " +
+            "  FROM genres g JOIN movie_genres mg ON mg.genre_id = g.id " +
             " WHERE mg.movie_id = ?";
     private static final GenreRowMapper GENRE_ROW_MAPPER = new GenreRowMapper();
 
