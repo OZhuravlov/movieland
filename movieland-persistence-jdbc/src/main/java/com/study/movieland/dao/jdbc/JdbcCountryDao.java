@@ -16,7 +16,7 @@ public class JdbcCountryDao implements CountryDao {
 
     private static final String GET_BY_ID_SQL = "SELECT id, name FROM countries WHERE id = ?";
     private static final String GET_BY_MOVIE_ID_SQL = "SELECT c.id, c.name " +
-            "  FROM countries c JOIN movie_countries mc ON mc.movie_id = c.id " +
+            "  FROM countries c JOIN movie_countries mc ON mc.country_id = c.id " +
             " WHERE mc.movie_id = ?";
     private static final CountryRowMapper COUNTRY_ROW_MAPPER = new CountryRowMapper();
 
