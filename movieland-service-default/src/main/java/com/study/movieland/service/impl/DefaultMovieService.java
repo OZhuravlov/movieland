@@ -126,7 +126,7 @@ public class DefaultMovieService implements MovieService {
             MovieRequestParam requestParam = new MovieRequestParam();
             requestParam.setCurrency(Currency.getDefault());
             MOVIE_CACHE.put(id, new SoftReference<>(getById(id, requestParam)));
-            logger.info("replace movie id {} in cache {}", id);
+            logger.info("replace movie id {} in cache", id);
         }
     }
 
