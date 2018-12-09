@@ -20,7 +20,7 @@ public class JdbcCountryDao implements CountryDao {
 
     private static final String GET_BY_ID_SQL = "SELECT id, name FROM countries WHERE id = ?";
     private static final String GET_BY_MOVIE_ID_SQL = "SELECT c.id, c.name " +
-            "  FROM countries c JOIN movie_countries mc ON mc.movie_id = c.id " +
+            "  FROM countries c JOIN movie_countries mc ON mc.country_id = c.id " +
             " WHERE mc.movie_id = ?";
     private static final String GET_ALL_SQL = "SELECT id, name FROM countries";
     private static final String REMOVE_MOVIE_COUNTRIES_SQL = "DELETE FROM movie_countries WHERE movie_id = ?";
