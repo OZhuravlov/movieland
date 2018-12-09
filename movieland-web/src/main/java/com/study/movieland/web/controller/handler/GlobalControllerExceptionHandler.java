@@ -1,6 +1,5 @@
 package com.study.movieland.web.controller.handler;
 
-import com.study.movieland.exception.IncompleteOperationException;
 import com.study.movieland.exception.UserAuthenticationException;
 import com.study.movieland.web.error.JsonError;
 import com.study.movieland.web.exception.BadRequestParamException;
@@ -19,7 +18,6 @@ public class GlobalControllerExceptionHandler {
     private final static String BAD_REQUEST_MESSAGE = "Bad Request params";
     private final static String UNAUTHORIZED_MESSAGE = "User unauthorized";
     private final static String METHOD_NOT_ALLOWED_MESSAGE = "No permissions to perform such operation";
-    private final static String INTERNAL_SERVER_ERROR_MESSAGE = "Cannot complete operation";
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -47,12 +45,6 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(value = HttpStatus.METHOD_NOT_ALLOWED, reason = METHOD_NOT_ALLOWED_MESSAGE)
     @ExceptionHandler(OperationNotAllowedException.class)
     public void handleOperationNotAllowedException(Exception e) {
-        logger.warn("Error", e);
-    }
-
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = INTERNAL_SERVER_ERROR_MESSAGE)
-    @ExceptionHandler(IncompleteOperationException.class)
-    public void handleIncompleteOperationException(Exception e) {
         logger.warn("Error", e);
     }
 

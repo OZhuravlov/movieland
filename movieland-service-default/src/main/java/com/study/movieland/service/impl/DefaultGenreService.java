@@ -38,9 +38,13 @@ public class DefaultGenreService implements GenreService {
     public void enrichMovie(Movie movie) {
         logger.debug("Enrich Movie with genres");
         List<Genre> genres = genreDao.getByMovieId(movie.getId());
-        movie.setGenres(genres);
-        logger.trace("Enrich Movie id {} with genres: {}", movie.getId(), genres);
-        movie.setGenres(genres);
+        if (!Thread.currentThread().isInterrupted()) {
+            movie.setGenres(genres);
+            logger.trace("Enrich Movie id {} with genres: {}", movie.getId(), genres);
+        } else {
+            logger.warn("Enrich Movie id {}. Thread was interrupted", movie.getId());
+        }
+
     }
 
     @Override

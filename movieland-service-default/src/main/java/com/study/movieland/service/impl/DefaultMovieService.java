@@ -5,7 +5,6 @@ import com.study.movieland.data.MovieRequestParam;
 import com.study.movieland.entity.Currency;
 import com.study.movieland.entity.Genre;
 import com.study.movieland.entity.Movie;
-import com.study.movieland.exception.IncompleteOperationException;
 import com.study.movieland.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class DefaultMovieService implements MovieService {
@@ -77,13 +79,9 @@ public class DefaultMovieService implements MovieService {
                 }
         );
         try {
-            List<Future<Boolean>> result = executor.invokeAll(tasks, 5, TimeUnit.SECONDS);
-            if (result.stream().anyMatch(Future::isCancelled)) {
-                throw new IncompleteOperationException("Can't get movie: timed out");
-            }
+            executor.invokeAll(tasks, executorTimeOutInSeconds, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             logger.error("Error", e);
-            throw new IncompleteOperationException("Can't get movie", e);
         }
         Currency currency = movieRequestParam.getCurrency();
         double convertedPrice = currencyService.getConvertedPrice(movie.getPrice(), currency);

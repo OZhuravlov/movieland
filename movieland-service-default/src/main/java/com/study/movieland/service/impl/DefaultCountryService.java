@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class DefaultCountryService implements CountryService {
@@ -22,8 +23,12 @@ public class DefaultCountryService implements CountryService {
     public void enrichMovie(Movie movie) {
         logger.info("Enrich Movie with countries");
         List<Country> countries = countryDao.getByMovieId(movie.getId());
-        movie.setCountries(countries);
-        logger.trace("Enrich Movie id {} with countries: {}", movie.getId(), countries);
+        if (!Thread.currentThread().isInterrupted()) {
+            movie.setCountries(countries);
+            logger.debug("Enrich Movie id {} with countries: {}", movie.getId(), countries);
+        } else {
+            logger.warn("Enrich Movie id {}. Thread was interrupted", movie.getId());
+        }
     }
 
     @Override
