@@ -12,15 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.lang.ref.SoftReference;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.concurrent.*;
 
 @Service
 public class DefaultMovieService implements MovieService {
+
+    private static final Map<Integer, SoftReference<Movie>> MOVIE_CACHE = new ConcurrentHashMap<>();
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final ExecutorService executor = Executors.newCachedThreadPool();
@@ -63,31 +64,44 @@ public class DefaultMovieService implements MovieService {
     @Override
     public Movie getById(int id, MovieRequestParam movieRequestParam) {
         logger.info("get Movies by id {}", id);
-        Movie movie = movieDao.getById(id);
-        List<Callable<Boolean>> tasks = Arrays.asList(
-                () -> {
-                    countryService.enrichMovie(movie);
-                    return true;
-                },
-                () -> {
-                    genreService.enrichMovie(movie);
-                    return true;
-                },
-                () -> {
-                    reviewService.enrichMovie(movie);
-                    return true;
+        Movie movie;
+        SoftReference<Movie> movieSoftReference = MOVIE_CACHE.get(id);
+        if (movieSoftReference != null && movieSoftReference.get() != null) {
+            movie = movieSoftReference.get();
+            logger.info("Got movie id {} from cache", id);
+        } else {
+            logger.info("getting movie id {} from main source", id);
+            movie = movieDao.getById(id);
+            List<Callable<Boolean>> tasks = Arrays.asList(
+                    () -> {
+                        countryService.enrichMovie(movie);
+                        return true;
+                    },
+                    () -> {
+                        genreService.enrichMovie(movie);
+                        return true;
+                    },
+                    () -> {
+                        reviewService.enrichMovie(movie);
+                        return true;
+                    }
+            );
+            try {
+                List<Future<Boolean>> result = executor.invokeAll(tasks, executorTimeOutInSeconds, TimeUnit.SECONDS);
+                if (result.stream().noneMatch(Future::isCancelled)) {
+                    MOVIE_CACHE.put(id, new SoftReference<>(movie));
+                    logger.info("Put movie id {} in cache", movie.getId());
                 }
-        );
-        try {
-            executor.invokeAll(tasks, executorTimeOutInSeconds, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            logger.error("Error", e);
+            } catch (InterruptedException e) {
+                logger.error("Error", e);
+            }
         }
+        Movie movieCopy = new Movie(movie);
         Currency currency = movieRequestParam.getCurrency();
-        double convertedPrice = currencyService.getConvertedPrice(movie.getPrice(), currency);
-        movie.setPrice(convertedPrice);
-        movie.setCurrency(currency);
-        return movie;
+        double convertedPrice = currencyService.getConvertedPrice(movieCopy.getPrice(), currency);
+        movieCopy.setPrice(convertedPrice);
+        movieCopy.setCurrency(currency);
+        return movieCopy;
     }
 
     @Override
@@ -106,6 +120,14 @@ public class DefaultMovieService implements MovieService {
         movieDao.edit(movie);
         countryService.editReference(movie);
         genreService.editReference(movie);
+        int id = movie.getId();
+        if (MOVIE_CACHE.containsKey(id)) {
+            MOVIE_CACHE.remove(id);
+            MovieRequestParam requestParam = new MovieRequestParam();
+            requestParam.setCurrency(Currency.getDefault());
+            MOVIE_CACHE.put(id, new SoftReference<>(getById(id, requestParam)));
+            logger.info("replace movie id {} in cache {}", id);
+        }
     }
 
     @Autowired

@@ -9,8 +9,6 @@ import java.sql.SQLException;
 
 public class MovieByIdRowMapper implements RowMapper<Movie> {
 
-    private static final Currency DEFAULT_CURRENCY = Currency.UAH;
-
     @Override
     public Movie mapRow(ResultSet rs, int rowNum) throws SQLException {
         Movie movie = new Movie();
@@ -20,7 +18,7 @@ public class MovieByIdRowMapper implements RowMapper<Movie> {
         movie.setYearOfRelease(rs.getInt("year_of_release"));
         movie.setRating(rs.getDouble("rating"));
         movie.setPrice(rs.getDouble("price"));
-        movie.setCurrency(DEFAULT_CURRENCY);
+        movie.setCurrency(Currency.getDefault());
         movie.setPicturePath(rs.getString("picture_path"));
         movie.setDescription(rs.getString("description"));
         return movie;

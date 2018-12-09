@@ -1,6 +1,7 @@
 package com.study.movieland.data;
 
 import com.study.movieland.entity.Currency;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
