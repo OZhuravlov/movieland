@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -91,6 +92,7 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Override
+    @Transactional
     public void add(Movie movie) {
         logger.info("add new movie {}", movie.getNameNative());
         logger.debug("movie values {}", movie);
@@ -100,6 +102,7 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Override
+    @Transactional
     public void edit(Movie movie) {
         logger.info("edit movie id {}", movie.getId());
         logger.debug("movie values: {}", movie);
