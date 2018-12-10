@@ -3,9 +3,7 @@ package com.study.movieland.web.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.study.movieland.data.MovieRequestParam;
 import com.study.movieland.data.SortDirection;
-import com.study.movieland.entity.Currency;
-import com.study.movieland.entity.Movie;
-import com.study.movieland.entity.Role;
+import com.study.movieland.entity.*;
 import com.study.movieland.service.MovieService;
 import com.study.movieland.view.Views;
 import com.study.movieland.web.annotation.ProtectedBy;
@@ -21,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -89,8 +88,8 @@ public class MovieController {
         movie.setDescription(movieAddRequestData.getDescription());
         movie.setPrice(movieAddRequestData.getPrice());
         movie.setPicturePath(movieAddRequestData.getPicturePath());
-        movie.setCountries(movieAddRequestData.getCountries());
-        movie.setGenres(movieAddRequestData.getGenres());
+        movie.setCountries(getCountries(movieAddRequestData.getCountries()));
+        movie.setGenres(getGenres(movieAddRequestData.getGenres()));
         logger.debug("add new movie {}", movie);
         movieService.add(movie);
     }
@@ -106,8 +105,8 @@ public class MovieController {
         movie.setNameNative(movieEditRequestData.getNameNative());
         movie.setNameRussian(movieEditRequestData.getNameRussian());
         movie.setPicturePath(movieEditRequestData.getPicturePath());
-        movie.setCountries(movieEditRequestData.getCountries());
-        movie.setGenres(movieEditRequestData.getGenres());
+        movie.setCountries(getCountries(movieEditRequestData.getCountries()));
+        movie.setGenres(getGenres(movieEditRequestData.getGenres()));
         logger.debug("edit movie {}", movie);
         movieService.edit(movie);
     }
@@ -143,4 +142,21 @@ public class MovieController {
         this.movieService = movieService;
     }
 
+    private List<Country> getCountries(List<Integer> countryIds){
+        List<Country> countries = new ArrayList<>();
+        for (Integer countryId : countryIds) {
+            Country country = new Country();
+            country.setId(countryId);
+            countries.add(country);
+        }
+        return countries;
+    }
+
+    private List<Genre> getGenres(List<Integer> genreIds){
+        List<Genre> genres = new ArrayList<>();
+        for (Integer genreId : genreIds) {
+            genres.add(Genre.newBuilder().setId(genreId).build());
+        }
+        return genres;
+    }
 }

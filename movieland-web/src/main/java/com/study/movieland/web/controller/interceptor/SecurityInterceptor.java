@@ -1,6 +1,7 @@
 package com.study.movieland.web.controller.interceptor;
 
 import com.study.movieland.data.Session;
+import com.study.movieland.entity.User;
 import com.study.movieland.service.SecurityService;
 import com.study.movieland.web.holder.UserHolder;
 import org.slf4j.Logger;
@@ -34,12 +35,14 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
         String token = request.getHeader("uuid");
         MDC.put(REQUEST_ID_PARAM_NAME, UUID.randomUUID().toString());
         Optional<Session> optionalSession = securityService.getSession(token);
-        String username = optionalSession
-                .map(s -> {
-                    UserHolder.setCurrentUser(s.getUser());
-                    return s.getUser().getEmail();
-                })
-                .orElse(DEFAULT_USERNAME);
+        String username;
+        if (optionalSession.isPresent()) {
+            User user = optionalSession.get().getUser();
+            UserHolder.setCurrentUser(user);
+            username = user.getEmail();
+        } else {
+            username = DEFAULT_USERNAME;
+        }
         MDC.put(USERNAME_PARAM_NAME, username);
         logger.debug("Recognize request");
         return true;
@@ -47,8 +50,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        MDC.remove(REQUEST_ID_PARAM_NAME);
-        MDC.remove(USERNAME_PARAM_NAME);
+        MDC.clear();
         UserHolder.clear();
     }
 }

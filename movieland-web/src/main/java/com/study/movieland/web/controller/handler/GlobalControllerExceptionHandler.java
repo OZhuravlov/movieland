@@ -42,10 +42,10 @@ public class GlobalControllerExceptionHandler {
         return JsonError.getJsonMessage(e.getMessage());
     }
 
-
     @ResponseStatus(value = HttpStatus.METHOD_NOT_ALLOWED, reason = METHOD_NOT_ALLOWED_MESSAGE)
     @ExceptionHandler(OperationNotAllowedException.class)
     public void handleOperationNotAllowedException(Exception e) {
         logger.warn("Error", e);
     }
+
 }

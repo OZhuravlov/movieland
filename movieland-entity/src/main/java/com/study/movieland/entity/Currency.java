@@ -21,4 +21,8 @@ public enum Currency {
         return false;
     }
 
+    public static Currency getDefault(){
+        return Currency.UAH;
+    }
+
 }

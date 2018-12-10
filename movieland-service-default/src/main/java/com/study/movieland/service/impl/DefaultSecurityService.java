@@ -65,8 +65,8 @@ public class DefaultSecurityService implements SecurityService {
     public Optional<Session> getSession(String token) {
         return Optional.ofNullable(token)
                 .filter(t -> sessions.containsKey(t))
-                .filter(t -> sessions.get(t).getExpireDate().isAfter(LocalDateTime.now()))
-                .map(t -> sessions.get(t));
+                .map(t -> sessions.get(t))
+                .filter(s -> s.getExpireDate().isAfter(LocalDateTime.now()));
     }
 
     @Autowired

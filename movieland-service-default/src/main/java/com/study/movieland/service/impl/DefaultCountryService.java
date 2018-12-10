@@ -22,8 +22,12 @@ public class DefaultCountryService implements CountryService {
     public void enrichMovie(Movie movie) {
         logger.info("Enrich Movie with countries");
         List<Country> countries = countryDao.getByMovieId(movie.getId());
-        movie.setCountries(countries);
-        logger.trace("Enrich Movie id {} with countries: {}", movie.getId(), countries);
+        if (!Thread.currentThread().isInterrupted()) {
+            movie.setCountries(countries);
+            logger.debug("Enrich Movie id {} with countries: {}", movie.getId(), countries);
+        } else {
+            logger.warn("Enrich Movie id {}. Thread was interrupted", movie.getId());
+        }
     }
 
     @Override
@@ -32,6 +36,16 @@ public class DefaultCountryService implements CountryService {
         List<Country> countries = countryDao.getAll();
         logger.trace("Get all countries: {}", countries);
         return countries;
+    }
+
+    @Override
+    public void addReference(Movie movie) {
+        countryDao.addReference(movie);
+    }
+
+    @Override
+    public void editReference(Movie movie) {
+        countryDao.editReference(movie);
     }
 
     @Autowired

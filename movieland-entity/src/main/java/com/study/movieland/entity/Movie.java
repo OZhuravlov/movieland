@@ -42,4 +42,19 @@ public class Movie {
         this.picturePath = picturePath;
     }
 
+    public Movie(Movie movieToCopy) {
+        this.id = movieToCopy.id;
+        this.nameNative = movieToCopy.nameNative;
+        this.nameRussian = movieToCopy.nameRussian;
+        this.yearOfRelease = movieToCopy.yearOfRelease;
+        this.rating = movieToCopy.rating;
+        this.price = movieToCopy.price;
+        this.picturePath = movieToCopy.picturePath;
+        this.currency = movieToCopy.currency;
+        this.description = movieToCopy.description;
+        this.countries = movieToCopy.countries;
+        this.genres = movieToCopy.genres;
+        this.reviews = movieToCopy.reviews;
+    }
+
 }

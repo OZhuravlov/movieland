@@ -2,6 +2,7 @@ package com.study.movieland.dao.cache;
 
 import com.study.movieland.dao.GenreDao;
 import com.study.movieland.entity.Genre;
+import com.study.movieland.entity.Movie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,16 @@ public class CacheGenreDao implements GenreDao {
         List<Genre> genres = genreDao.getByMovieId(movieId);
         logger.trace("get genres: {}", genres);
         return genres;
+    }
+
+    @Override
+    public void addReference(Movie movie) {
+        genreDao.addReference(movie);
+    }
+
+    @Override
+    public void editReference(Movie movie) {
+        genreDao.editReference(movie);
     }
 
     @Autowired

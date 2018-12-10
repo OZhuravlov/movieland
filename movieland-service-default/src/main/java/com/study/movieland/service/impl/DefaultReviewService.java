@@ -22,8 +22,12 @@ public class DefaultReviewService implements ReviewService {
     public void enrichMovie(Movie movie) {
         logger.debug("Enrich Movie with reviews");
         List<Review> reviews = reviewDao.getByMovieId(movie.getId());
-        movie.setReviews(reviews);
-        logger.trace("Enrich Movie id {} with reviews: {}", movie.getId(), reviews);
+        if (!Thread.currentThread().isInterrupted()) {
+            movie.setReviews(reviews);
+            logger.debug("Enrich Movie id {} with reviews: {}", movie.getId(), reviews);
+        } else {
+            logger.warn("Enrich Movie id {}. Thread was interrupted", movie.getId());
+        }
     }
 
     @Override
