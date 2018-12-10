@@ -54,7 +54,6 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Override
-    @Transactional
     public Movie getById(int id, MovieRequestParam movieRequestParam) {
         logger.info("get Movies by id {}", id);
         Movie movie = movieDao.getById(id);
@@ -69,6 +68,7 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Override
+    @Transactional
     public void add(Movie movie) {
         logger.info("add new movie {}", movie.getNameNative());
         logger.debug("movie values {}", movie);
@@ -78,6 +78,7 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Override
+    @Transactional
     public void edit(Movie movie) {
         logger.info("edit movie id {}", movie.getId());
         logger.debug("movie values: {}", movie);
