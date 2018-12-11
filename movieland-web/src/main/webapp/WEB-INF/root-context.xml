@@ -42,4 +42,14 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="5" />
+        <property name="maxPoolSize" value="10" />
+        <property name="WaitForTasksToCompleteOnShutdown" value="true" />
+    </bean>
+
+    <bean id="executorService" class="org.springframework.core.task.support.ExecutorServiceAdapter">
+        <constructor-arg ref="taskExecutor" />
+    </bean>
+
 </beans>

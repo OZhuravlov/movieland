@@ -11,7 +11,7 @@ public interface GenreService {
 
     Genre getById(int id);
 
-    void enrichMovie(Movie movie);
+    void enrich(Movie movie);
 
     void addReference(Movie movie);
 

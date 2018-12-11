@@ -19,16 +19,17 @@ public class DefaultCountryService implements CountryService {
     private CountryDao countryDao;
 
     @Override
-    public void enrichMovie(Movie movie) {
+    public void enrich(Movie movie) {
         logger.info("Enrich Movie with countries");
         List<Country> countries = countryDao.getByMovieId(movie.getId());
         if (!Thread.currentThread().isInterrupted()) {
-            movie.setCountries(countries);
             logger.debug("Enrich Movie id {} with countries: {}", movie.getId(), countries);
+            movie.setCountries(countries);
         } else {
             logger.warn("Enrich Movie id {}. Thread was interrupted", movie.getId());
         }
     }
+
 
     @Override
     public List<Country> getAll() {
