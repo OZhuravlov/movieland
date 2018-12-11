@@ -53,7 +53,7 @@ public class NbuCurrencyService implements CurrencyService {
         movie.setPriceInCurrency(convertedPrice);
     }
 
-    private Double getConvertedPrice(double price, Currency currency) {
+    private double getConvertedPrice(double price, Currency currency) {
         if (currency.equals(baseCurrency)) {
             return price;
         }
