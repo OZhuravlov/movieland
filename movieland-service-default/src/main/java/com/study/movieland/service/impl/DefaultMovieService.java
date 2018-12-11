@@ -24,14 +24,12 @@ import java.util.concurrent.TimeUnit;
 public class DefaultMovieService implements MovieService {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final ExecutorService executor = Executors.newCachedThreadPool();
 
     private MovieDao movieDao;
+    private CurrencyService currencyService;
     private GenreService genreService;
     private CountryService countryService;
-    private ReviewService reviewService;
-    private CurrencyService currencyService;
-    private int executorTimeOutInSeconds;
+    private EnrichService enrichService;
 
     @Override
     public List<Movie> getAll(MovieRequestParam movieRequestParam) {
@@ -65,25 +63,7 @@ public class DefaultMovieService implements MovieService {
     public Movie getById(int id, MovieRequestParam movieRequestParam) {
         logger.info("get Movies by id {}", id);
         Movie movie = movieDao.getById(id);
-        List<Callable<Boolean>> tasks = Arrays.asList(
-                () -> {
-                    countryService.enrichMovie(movie);
-                    return true;
-                },
-                () -> {
-                    genreService.enrichMovie(movie);
-                    return true;
-                },
-                () -> {
-                    reviewService.enrichMovie(movie);
-                    return true;
-                }
-        );
-        try {
-            executor.invokeAll(tasks, executorTimeOutInSeconds, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            logger.error("Error", e);
-        }
+        enrichService.enrich(movie);
         Currency currency = movieRequestParam.getCurrency();
         double convertedPrice = currencyService.getConvertedPrice(movie.getPrice(), currency);
         movie.setPrice(convertedPrice);
@@ -122,22 +102,17 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Autowired
+    public void setCurrencyService(CurrencyService currencyService) {
+        this.currencyService = currencyService;
+    }
+
+    @Autowired
     public void setCountryService(CountryService countryService) {
         this.countryService = countryService;
     }
 
     @Autowired
-    public void setReviewService(ReviewService reviewService) {
-        this.reviewService = reviewService;
-    }
-
-    @Autowired
-    public void setCurrencyService(CurrencyService currencyService) {
-        this.currencyService = currencyService;
-    }
-
-    @Value("${service.movie.executor.timeOutInSeconds}")
-    public void setExecutorTimeOutInSeconds(int executorTimeOutInSeconds) {
-        this.executorTimeOutInSeconds = executorTimeOutInSeconds;
+    public void setEnrichService(EnrichService enrichService) {
+        this.enrichService = enrichService;
     }
 }
