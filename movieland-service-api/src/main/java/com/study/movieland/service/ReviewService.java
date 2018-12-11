@@ -5,7 +5,7 @@ import com.study.movieland.entity.Review;
 
 public interface ReviewService {
 
-    void enrichMovie(Movie movie);
+    void enrich(Movie movie);
 
     void add(int movieId, Review review);
 }

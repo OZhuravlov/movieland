@@ -9,30 +9,23 @@ import com.study.movieland.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.ref.SoftReference;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.*;
+import java.util.Optional;
 
 @Service
 public class DefaultMovieService implements MovieService {
 
-    private static final Map<Integer, SoftReference<Movie>> MOVIE_CACHE = new ConcurrentHashMap<>();
-
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final ExecutorService executor = Executors.newCachedThreadPool();
 
     private MovieDao movieDao;
+    private CurrencyService currencyService;
     private GenreService genreService;
     private CountryService countryService;
-    private ReviewService reviewService;
-    private CurrencyService currencyService;
-    private int executorTimeOutInSeconds;
+    private EnrichService enrichService;
+    private CacheService cacheService;
 
     @Override
     public List<Movie> getAll(MovieRequestParam movieRequestParam) {
@@ -66,49 +59,30 @@ public class DefaultMovieService implements MovieService {
     public Movie getById(int id, MovieRequestParam movieRequestParam) {
         logger.info("get Movies by id {}", id);
         Movie movie;
-        SoftReference<Movie> movieSoftReference = MOVIE_CACHE.get(id);
-        if (movieSoftReference != null && movieSoftReference.get() != null) {
-            movie = movieSoftReference.get();
+        Optional<Movie> optionalMovie = cacheService.getMovie(id);
+        if (optionalMovie.isPresent()) {
             logger.info("Got movie id {} from cache", id);
+            movie = optionalMovie.get();
         } else {
-            logger.info("getting movie id {} from main source", id);
             movie = movieDao.getById(id);
-            List<Callable<Boolean>> tasks = Arrays.asList(
-                    () -> {
-                        countryService.enrichMovie(movie);
-                        return true;
-                    },
-                    () -> {
-                        genreService.enrichMovie(movie);
-                        return true;
-                    },
-                    () -> {
-                        reviewService.enrichMovie(movie);
-                        return true;
-                    }
-            );
-            try {
-                List<Future<Boolean>> result = executor.invokeAll(tasks, executorTimeOutInSeconds, TimeUnit.SECONDS);
-                if (result.stream().noneMatch(Future::isCancelled)) {
-                    MOVIE_CACHE.put(id, new SoftReference<>(movie));
-                    logger.info("Put movie id {} in cache", movie.getId());
-                }
-            } catch (InterruptedException e) {
-                logger.error("Error", e);
+            boolean isEnrichSuccess = enrichService.enrich(movie);
+            if(isEnrichSuccess) {
+                cacheService.putMovie(movie);
+                logger.info("Put movie id {} in cache", movie.getId());
             }
         }
-        Movie movieCopy = new Movie(movie);
+        movie = new Movie(movie);
         Currency currency = movieRequestParam.getCurrency();
-        double convertedPrice = currencyService.getConvertedPrice(movieCopy.getPrice(), currency);
-        movieCopy.setPrice(convertedPrice);
-        movieCopy.setCurrency(currency);
-        return movieCopy;
+        double convertedPrice = currencyService.getConvertedPrice(movie.getPrice(), currency);
+        movie.setPrice(convertedPrice);
+        movie.setCurrency(currency);
+        return movie;
     }
 
     @Override
     @Transactional
     public void add(Movie movie) {
-        logger.info("add new movie {}", movie.getNameNative());
+        logger.info("putMovie new movie {}", movie.getNameNative());
         logger.debug("movie values {}", movie);
         movieDao.add(movie);
         countryService.addReference(movie);
@@ -124,11 +98,11 @@ public class DefaultMovieService implements MovieService {
         countryService.editReference(movie);
         genreService.editReference(movie);
         int id = movie.getId();
-        if (MOVIE_CACHE.containsKey(id)) {
-            MOVIE_CACHE.remove(id);
+        if (cacheService.existsMovie(id)) {
+            cacheService.removeMovie(id);
             MovieRequestParam requestParam = new MovieRequestParam();
             requestParam.setCurrency(Currency.getDefault());
-            MOVIE_CACHE.put(id, new SoftReference<>(getById(id, requestParam)));
+            getById(id, requestParam);
             logger.info("replace movie id {} in cache", id);
         }
     }
@@ -144,22 +118,23 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Autowired
+    public void setCurrencyService(CurrencyService currencyService) {
+        this.currencyService = currencyService;
+    }
+
+    @Autowired
     public void setCountryService(CountryService countryService) {
         this.countryService = countryService;
     }
 
     @Autowired
-    public void setReviewService(ReviewService reviewService) {
-        this.reviewService = reviewService;
+    public void setEnrichService(EnrichService enrichService) {
+        this.enrichService = enrichService;
     }
 
     @Autowired
-    public void setCurrencyService(CurrencyService currencyService) {
-        this.currencyService = currencyService;
+    public void setCacheService(CacheService cacheService) {
+        this.cacheService = cacheService;
     }
 
-    @Value("${service.movie.executor.timeOutInSeconds}")
-    public void setExecutorTimeOutInSeconds(int executorTimeOutInSeconds) {
-        this.executorTimeOutInSeconds = executorTimeOutInSeconds;
-    }
 }
