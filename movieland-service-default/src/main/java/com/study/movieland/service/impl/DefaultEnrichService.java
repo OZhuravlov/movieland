@@ -20,11 +20,12 @@ public class DefaultEnrichService implements EnrichService {
     private ReviewService reviewService;
 
     @Override
-    public void enrich(Movie movie) {
+    public boolean enrich(Movie movie) {
         logger.info("Enrich movie");
         genreService.enrich(movie);
         countryService.enrich(movie);
         reviewService.enrich(movie);
+        return true;
     }
 
     @Autowired

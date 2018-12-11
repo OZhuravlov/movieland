@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -31,7 +32,8 @@ public class ParallelEnrichService implements EnrichService {
     private int executorTimeOutInSeconds;
 
     @Override
-    public void enrich(Movie movie) {
+    public boolean enrich(Movie movie) {
+        boolean isEnrichSuccess = false;
         logger.info("Enrich movie in parallel");
         List<Callable<Boolean>> tasks = Arrays.asList(
                 () -> {
@@ -48,10 +50,15 @@ public class ParallelEnrichService implements EnrichService {
                 }
         );
         try {
-            executorService.invokeAll(tasks, executorTimeOutInSeconds, TimeUnit.SECONDS);
+            List<Future<Boolean>> result = executorService.invokeAll(tasks, executorTimeOutInSeconds, TimeUnit.SECONDS);
+            if (result.stream().noneMatch(Future::isCancelled)) {
+                isEnrichSuccess = true;
+                logger.info("Enrichment succeed", movie.getId());
+            }
         } catch (InterruptedException e) {
             logger.error("Error", e);
         }
+        return isEnrichSuccess;
     }
 
     @Autowired

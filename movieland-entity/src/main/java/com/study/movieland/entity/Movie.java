@@ -5,6 +5,7 @@ import com.study.movieland.view.Views;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -52,9 +53,9 @@ public class Movie {
         this.picturePath = movieToCopy.picturePath;
         this.currency = movieToCopy.currency;
         this.description = movieToCopy.description;
-        this.countries = movieToCopy.countries;
-        this.genres = movieToCopy.genres;
-        this.reviews = movieToCopy.reviews;
+        this.countries = new ArrayList<>(movieToCopy.countries);
+        this.genres = new ArrayList<>(movieToCopy.genres);
+        this.reviews = new ArrayList<>(movieToCopy.reviews);
     }
 
 }

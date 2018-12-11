@@ -80,7 +80,7 @@ public class MovieController {
     @RequestMapping(method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     @ProtectedBy(allowedRoles = Role.ADMIN)
     public void addMovie(@RequestBody MovieAddRequestData movieAddRequestData) {
-        logger.info("add new movie");
+        logger.info("putMovie new movie");
         Movie movie = new Movie();
         movie.setNameNative(movieAddRequestData.getNameNative());
         movie.setNameRussian(movieAddRequestData.getNameRussian());
@@ -90,7 +90,7 @@ public class MovieController {
         movie.setPicturePath(movieAddRequestData.getPicturePath());
         movie.setCountries(getCountries(movieAddRequestData.getCountries()));
         movie.setGenres(getGenres(movieAddRequestData.getGenres()));
-        logger.debug("add new movie {}", movie);
+        logger.debug("putMovie new movie {}", movie);
         movieService.add(movie);
     }
 

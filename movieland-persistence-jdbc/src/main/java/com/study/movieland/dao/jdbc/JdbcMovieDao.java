@@ -101,7 +101,7 @@ public class JdbcMovieDao implements MovieDao {
 
     @Override
     public void edit(Movie movie) {
-        logger.info("add new movie: {}", movie);
+        logger.info("edit movie: {}", movie);
         MapSqlParameterSource queryParams = new MapSqlParameterSource()
                 .addValue("movie_id", movie.getId())
                 .addValue("nameRussian", movie.getNameRussian())
