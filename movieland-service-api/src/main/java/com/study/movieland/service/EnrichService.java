@@ -4,6 +4,6 @@ import com.study.movieland.entity.Movie;
 
 public interface EnrichService {
 
-    boolean enrich(Movie movie);
+    void enrich(Movie movie);
 
 }

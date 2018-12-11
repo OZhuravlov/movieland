@@ -21,13 +21,14 @@ public class Movie {
     @JsonView(Views.Summary.class)
     private int yearOfRelease;
     @JsonView(Views.Summary.class)
-    private Double rating;
+    private double rating;
     @JsonView(Views.Summary.class)
     private String picturePath;
     @JsonView(Views.Summary.class)
-    private Double price;
+    private double price;
 
     private Currency currency;
+    private double priceInCurrency;
     private String description;
     private volatile List<Country> countries;
     private volatile List<Genre> genres;

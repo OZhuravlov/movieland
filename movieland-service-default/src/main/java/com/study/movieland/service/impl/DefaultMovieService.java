@@ -2,7 +2,6 @@ package com.study.movieland.service.impl;
 
 import com.study.movieland.dao.MovieDao;
 import com.study.movieland.data.MovieRequestParam;
-import com.study.movieland.entity.Currency;
 import com.study.movieland.entity.Genre;
 import com.study.movieland.entity.Movie;
 import com.study.movieland.service.*;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DefaultMovieService implements MovieService {
@@ -25,7 +23,6 @@ public class DefaultMovieService implements MovieService {
     private GenreService genreService;
     private CountryService countryService;
     private EnrichService enrichService;
-    private CacheService cacheService;
 
     @Override
     public List<Movie> getAll(MovieRequestParam movieRequestParam) {
@@ -58,24 +55,9 @@ public class DefaultMovieService implements MovieService {
     @Override
     public Movie getById(int id, MovieRequestParam movieRequestParam) {
         logger.info("get Movies by id {}", id);
-        Movie movie;
-        Optional<Movie> optionalMovie = cacheService.getMovie(id);
-        if (optionalMovie.isPresent()) {
-            logger.info("Got movie id {} from cache", id);
-            movie = optionalMovie.get();
-        } else {
-            movie = movieDao.getById(id);
-            boolean isEnrichSuccess = enrichService.enrich(movie);
-            if(isEnrichSuccess) {
-                cacheService.putMovie(movie);
-                logger.info("Put movie id {} in cache", movie.getId());
-            }
-        }
-        movie = new Movie(movie);
-        Currency currency = movieRequestParam.getCurrency();
-        double convertedPrice = currencyService.getConvertedPrice(movie.getPrice(), currency);
-        movie.setPrice(convertedPrice);
-        movie.setCurrency(currency);
+        Movie movie = movieDao.getById(id);
+        enrichService.enrich(movie);
+        currencyService.enrichMoviePriceInCurrency(movie, movieRequestParam.getCurrency());
         return movie;
     }
 
@@ -97,14 +79,6 @@ public class DefaultMovieService implements MovieService {
         movieDao.edit(movie);
         countryService.editReference(movie);
         genreService.editReference(movie);
-        int id = movie.getId();
-        if (cacheService.existsMovie(id)) {
-            cacheService.removeMovie(id);
-            MovieRequestParam requestParam = new MovieRequestParam();
-            requestParam.setCurrency(Currency.getDefault());
-            getById(id, requestParam);
-            logger.info("replace movie id {} in cache", id);
-        }
     }
 
     @Autowired
@@ -130,11 +104,6 @@ public class DefaultMovieService implements MovieService {
     @Autowired
     public void setEnrichService(EnrichService enrichService) {
         this.enrichService = enrichService;
-    }
-
-    @Autowired
-    public void setCacheService(CacheService cacheService) {
-        this.cacheService = cacheService;
     }
 
 }
