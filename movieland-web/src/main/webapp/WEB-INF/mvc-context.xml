@@ -18,6 +18,7 @@
         <mvc:interceptor>
             <mvc:mapping path="/review/**"/>
             <mvc:mapping path="/movie/**"/>
+            <mvc:mapping path="/report/**"/>
             <bean class="com.study.movieland.web.controller.interceptor.PermissionCheckInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

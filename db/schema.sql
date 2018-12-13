@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS movies;
 DROP TABLE IF EXISTS genres;
 DROP TABLE IF EXISTS countries;
+DROP TABLE IF EXISTS reports;
 
 CREATE TABLE users
 ( id         INT           PRIMARY KEY
@@ -35,6 +36,8 @@ CREATE TABLE movies
 , rating          NUMERIC(5,2)
 , price           NUMERIC(15,2) NOT NULL
 , picture_path    VARCHAR(4000)
+, create_date     TIMESTAMP     NOT NULL DEFAULT now()
+, modified_date   TIMESTAMP
 );
 
 CREATE TABLE movie_genres
@@ -54,4 +57,15 @@ CREATE TABLE reviews
 , movie_id        INT          NOT NULL REFERENCES movies(id)
 , user_id         INT          NOT NULL REFERENCES users(id)
 , review_text     TEXT         NOT NULL
+);
+
+CREATE TABLE reports
+( id                     SERIAL       NOT NULL   PRIMARY KEY
+, report_type            VARCHAR(100) NOT NULL
+, report_format          VARCHAR(100) NOT NULL
+, status                 VARCHAR(100) NOT NULL
+, date_from              DATE
+, date_to                DATE
+, last_updated           TIMESTAMP    NOT NULL   DEFAULT now()
+, path_to_file           VARCHAR(1000)
 );
