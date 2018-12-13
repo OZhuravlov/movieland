@@ -1,9 +1,10 @@
 package com.study.movieland.service;
 
 import com.study.movieland.entity.Currency;
+import com.study.movieland.entity.Movie;
 
 public interface CurrencyService {
 
-    Double getConvertedPrice(double price, Currency currency);
+    void enrichMoviePriceInCurrency(Movie movie, Currency currency);
 
 }

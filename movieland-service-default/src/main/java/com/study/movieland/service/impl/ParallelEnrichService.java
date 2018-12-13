@@ -32,8 +32,7 @@ public class ParallelEnrichService implements EnrichService {
     private int executorTimeOutInSeconds;
 
     @Override
-    public boolean enrich(Movie movie) {
-        boolean isEnrichSuccess = false;
+    public void enrich(Movie movie) {
         logger.info("Enrich movie in parallel");
         List<Callable<Boolean>> tasks = Arrays.asList(
                 () -> {
@@ -52,13 +51,11 @@ public class ParallelEnrichService implements EnrichService {
         try {
             List<Future<Boolean>> result = executorService.invokeAll(tasks, executorTimeOutInSeconds, TimeUnit.SECONDS);
             if (result.stream().noneMatch(Future::isCancelled)) {
-                isEnrichSuccess = true;
                 logger.info("Enrichment succeed", movie.getId());
             }
         } catch (InterruptedException e) {
             logger.error("Error", e);
         }
-        return isEnrichSuccess;
     }
 
     @Autowired

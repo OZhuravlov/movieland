@@ -2,6 +2,7 @@ package com.study.movieland.service.impl;
 
 import com.study.movieland.data.NbuCurrencyRate;
 import com.study.movieland.entity.Currency;
+import com.study.movieland.entity.Movie;
 import com.study.movieland.service.CurrencyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,14 @@ public class NbuCurrencyService implements CurrencyService {
     }
 
     @Override
-    public Double getConvertedPrice(double price, Currency currency) {
+    public void enrichMoviePriceInCurrency(Movie movie, Currency currency) {
+        logger.info("Convert movie id {} price into {}", movie.getId(), currency.toString());
+        double convertedPrice = getConvertedPrice(movie.getPrice(), currency);
+        movie.setCurrency(currency);
+        movie.setPriceInCurrency(convertedPrice);
+    }
+
+    private double getConvertedPrice(double price, Currency currency) {
         if (currency.equals(baseCurrency)) {
             return price;
         }
@@ -80,4 +88,5 @@ public class NbuCurrencyService implements CurrencyService {
     public void setUrl(String url) {
         this.url = url;
     }
+
 }
