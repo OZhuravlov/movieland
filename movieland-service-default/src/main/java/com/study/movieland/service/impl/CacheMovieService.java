@@ -64,7 +64,7 @@ public class CacheMovieService implements MovieService {
         movie = movieService.getById(id, movieRequestParam);
         logger.info("Put movie id {} into cache", id);
         MOVIE_CACHE.put(id, new SoftReference<>(movie));
-        return movie;
+        return new Movie(movie);
     }
 
     @Override
