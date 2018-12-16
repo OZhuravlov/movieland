@@ -49,7 +49,6 @@ public class CacheMovieService implements MovieService {
     @Override
     public Movie getById(int id, MovieRequestParam movieRequestParam) {
         logger.info("Get movie");
-        Optional<Movie> optionalMovie = Optional.empty();
         SoftReference<Movie> movieSoftReference = MOVIE_CACHE.get(id);
         Movie movie = null;
         if (movieSoftReference != null) {
