@@ -49,21 +49,21 @@ public class CacheMovieService implements MovieService {
     @Override
     public Movie getById(int id, MovieRequestParam movieRequestParam) {
         logger.info("Get movie");
-        Optional<Movie> optionalMovie = Optional.empty();
         SoftReference<Movie> movieSoftReference = MOVIE_CACHE.get(id);
-        Movie movie;
+        Movie movie = null;
         if (movieSoftReference != null) {
-            optionalMovie = Optional.ofNullable(movieSoftReference.get());
+            movie = movieSoftReference.get();
         }
-        if (optionalMovie.isPresent()) {
+        if (movie != null) {
             logger.info("Get movie id {} from cache", id);
             movie = optionalMovie.get();
             currencyService.enrichMoviePriceInCurrency(movie, movieRequestParam.getCurrency());
-            return movie;
+        } else {
+            logger.info("Get movie id {}", id);
+            movie = movieService.getById(id, movieRequestParam);
+            logger.info("Put movie id {} into cache", id);
+            MOVIE_CACHE.put(id, new SoftReference<>(movie));
         }
-        movie = movieService.getById(id, movieRequestParam);
-        logger.info("Put movie id {} into cache", id);
-        MOVIE_CACHE.put(id, new SoftReference<>(movie));
         return new Movie(movie);
     }
 
