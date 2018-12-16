@@ -56,7 +56,6 @@ public class CacheMovieService implements MovieService {
         }
         if (movie != null) {
             logger.info("Get movie id {} from cache", id);
-            movie = optionalMovie.get();
             currencyService.enrichMoviePriceInCurrency(movie, movieRequestParam.getCurrency());
         } else {
             logger.info("Get movie id {}", id);
