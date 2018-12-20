@@ -13,7 +13,7 @@ import java.util.List;
 public class Movie {
 
     @JsonView(Views.Summary.class)
-    int id;
+    private int id;
     @JsonView(Views.Summary.class)
     private String nameNative;
     @JsonView(Views.Summary.class)
