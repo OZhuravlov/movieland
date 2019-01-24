@@ -53,6 +53,7 @@ public class Movie {
         this.price = movieToCopy.price;
         this.picturePath = movieToCopy.picturePath;
         this.currency = movieToCopy.currency;
+        this.priceInCurrency = movieToCopy.priceInCurrency;
         this.description = movieToCopy.description;
         this.countries = new ArrayList<>(movieToCopy.countries);
         this.genres = new ArrayList<>(movieToCopy.genres);
